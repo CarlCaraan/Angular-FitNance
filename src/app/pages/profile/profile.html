@@ -412,21 +412,30 @@
             </div>
 
 
+
             <!-- ========================= -->
             <!-- SAVE BUTTON -->
             <!-- ========================= -->
 
-            <div class="flex justify-end">
+            <div class="flex items-center justify-start gap-3">
 
-                <button type="submit" [disabled]="isLoading" class="px-5 py-2 rounded-lg text-sm
-                           bg-[var(--primary-color)]
-                           text-white
-                           font-semibold
-                           hover:opacity-90
-                           transition
-                           disabled:opacity-50">
-                    {{ isLoading ? 'Saving...' : 'Save Changes' }}
+                <button type="submit" [disabled]="isSaving" class="px-5 py-2 rounded-lg text-sm
+               bg-[var(--primary-color)]
+               text-white
+               font-semibold
+               hover:opacity-90
+               transition
+               disabled:opacity-50">
+
+                    {{ isSaving ? 'Saving...' : 'Save Changes' }}
+
                 </button>
+
+                @if (showSaved()) {
+                <span class="text-sm text-[var(--secondary-font-color)]">
+                    saved.
+                </span>
+                }
 
             </div>
 

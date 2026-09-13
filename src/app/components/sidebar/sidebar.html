@@ -48,13 +48,64 @@
     <a routerLink="/dashboard" routerLinkActive="bg-[var(--secondary-color)]"
       [routerLinkActiveOptions]="{ exact: true }" class="flex items-center gap-3 px-3 py-3 rounded-lg transition"
       style="color: var(--primary-font-color);">
-      <span>🏠</span>
+      <span>🪟</span>
 
       @if (!isCollapsed) {
       <span>Dashboard</span>
       }
     </a>
 
+    <!-- Setup -->
+
+    <a routerLink="/setup" routerLinkActive="bg-[var(--secondary-color)]" outerLinkActive="bg-[var(--secondary-color)]"
+      [routerLinkActiveOptions]="{ exact: true }" class="flex items-center gap-3 px-3 py-3 rounded-lg transition"
+      style="color: var(--primary-font-color);">
+      <span>🛠️</span>
+
+      @if (!isCollapsed) {
+      <span>Setup</span>
+      }
+
+    </a>
+
+    <!-- Food List -->
+
+    <a routerLink="/foodlist" routerLinkActive="bg-[var(--secondary-color)]"
+      outerLinkActive="bg-[var(--secondary-color)]" [routerLinkActiveOptions]="{ exact: true }"
+      class="flex items-center gap-3 px-3 py-3 rounded-lg transition" style="color: var(--primary-font-color);">
+      <span>🥑</span>
+
+      @if (!isCollapsed) {
+      <span>Food List</span>
+      }
+
+    </a>
+
+    <!-- Meal Plan -->
+
+    <a routerLink="/mealplan" routerLinkActive="bg-[var(--secondary-color)]"
+      outerLinkActive="bg-[var(--secondary-color)]" [routerLinkActiveOptions]="{ exact: true }"
+      class="flex items-center gap-3 px-3 py-3 rounded-lg transition" style="color: var(--primary-font-color);">
+      <span>🍽️</span>
+
+      @if (!isCollapsed) {
+      <span>Meal Plan</span>
+      }
+
+    </a>
+
+    <!-- Workout Plan -->
+
+    <a routerLink="/workoutplan" routerLinkActive="bg-[var(--secondary-color)]"
+      outerLinkActive="bg-[var(--secondary-color)]" [routerLinkActiveOptions]="{ exact: true }"
+      class="flex items-center gap-3 px-3 py-3 rounded-lg transition" style="color: var(--primary-font-color);">
+      <span>🏋️‍♂️</span>
+
+      @if (!isCollapsed) {
+      <span>Workout Plan</span>
+      }
+
+    </a>
 
     <!-- Profile -->
 

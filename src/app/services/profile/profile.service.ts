@@ -6,6 +6,8 @@ import { environment } from '../../../environments/environment';
 import { UserProfile } from '../../models/profile/profile';
 import { ComputeProfileRequest } from '../../models/profile/compute-profile-request';
 import { ComputeProfileResponse } from '../../models/profile/compute-profile-response';
+import { UpdateProfileRequest } from '../../models/profile/update-profile-request';
+import { UpdateProfileResponse } from '../../models/profile/update-profile-response';
 
 @Injectable({
   providedIn: 'root',
@@ -21,5 +23,12 @@ export class ProfileService {
 
   computeTargets(request: ComputeProfileRequest): Observable<ComputeProfileResponse> {
     return this.http.post<ComputeProfileResponse>(`${this.apiUrl}/computeTargets`, request);
+  }
+
+  updateProfile(
+    userProfileId: string,
+    request: UpdateProfileRequest,
+  ): Observable<UpdateProfileResponse> {
+    return this.http.put<UpdateProfileResponse>(`${this.apiUrl}/${userProfileId}`, request);
   }
 }

@@ -1,3 +1,10 @@
+@if (loadingService.isLoading()) {
+<div class="fixed top-0 left-0 w-full z-50">
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>
+}
+
+
 <div class="flex h-dvh overflow-hidden bg-[var(--background-color)]">
 
   <!-- ========================================= -->

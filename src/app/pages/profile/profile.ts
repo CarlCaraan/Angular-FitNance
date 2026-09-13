@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { ProfileService } from '../../services/profile/profile.service';
@@ -10,11 +10,15 @@ import { NutritionGoalsService } from '../../services/setup/nutrition-goals.serv
 import { ActivityLevel } from '../../models/setup/activity-level';
 import { NutritionGoals } from '../../models/setup/nutrition-goals';
 
-import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { debounceTime, distinctUntilChanged, finalize } from 'rxjs';
 
 import { ComputeProfileRequest } from '../../models/profile/compute-profile-request';
 import { ComputeProfileResponse } from '../../models/profile/compute-profile-response';
 import { AuthService } from '../../services/authentication/auth.service';
+import { LoadingService } from '../../services/loading/loading.service';
+import { UpdateProfileRequest } from '../../models/profile/update-profile-request';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialog } from '../../components/dialogs/confirm-dialog/confirm-dialog';
 
 @Component({
   selector: 'app-profile',
@@ -28,10 +32,12 @@ export class Profile implements OnInit {
 
   profile: UserProfile | null = null;
 
-  isLoading = false;
-
   activityLevels: ActivityLevel[] = [];
   nutritionGoals: NutritionGoals[] = [];
+
+  isSaving = false;
+
+  public showSaved = signal(false);
 
   constructor(
     private fb: FormBuilder,
@@ -39,6 +45,8 @@ export class Profile implements OnInit {
     private activityLevelService: ActivityLevelService,
     private nutritionGoalsService: NutritionGoalsService,
     private authService: AuthService,
+    private loadingService: LoadingService,
+    private dialog: MatDialog,
   ) {
     this.profileForm = this.fb.group({
       // ==========================================
@@ -165,7 +173,10 @@ export class Profile implements OnInit {
 
     console.log('Loading profile for:', username);
 
-    this.isLoading = true;
+    // ==========================================
+    // START GLOBAL LOADING
+    // ==========================================
+    this.loadingService.start();
 
     this.profileService.getProfile(username).subscribe({
       next: (profile: UserProfile) => {
@@ -173,41 +184,54 @@ export class Profile implements OnInit {
 
         this.profile = profile;
 
-        this.profileForm.patchValue({
-          userProfileId: profile.userProfileId,
-          birthdate: this.formatDate(profile.birthdate),
-          age: profile.age,
-          gender: profile.gender,
+        this.profileForm.patchValue(
+          {
+            userProfileId: profile.userProfileId,
+            birthdate: this.formatDate(profile.birthdate),
+            age: profile.age,
+            gender: profile.gender,
 
-          height: profile.height,
-          weight: profile.weight,
+            height: profile.height,
+            weight: profile.weight,
 
-          currentBMI: profile.currentBMI,
+            currentBMI: profile.currentBMI,
 
-          activityLevelId: profile.activityLevelId,
-          fitnessGoalId: profile.fitnessGoalId,
+            activityLevelId: profile.activityLevelId,
+            fitnessGoalId: profile.fitnessGoalId,
 
-          monthlyIncome: profile.monthlyIncome,
-          savingsGoal: profile.savingsGoal,
-          currentSavings: profile.currentSavings,
+            monthlyIncome: profile.monthlyIncome,
+            savingsGoal: profile.savingsGoal,
+            currentSavings: profile.currentSavings,
 
-          targetCalories: profile.targetCalories,
-          targetProtein: profile.targetProtein,
-          targetCarbs: profile.targetCarbs,
-          targetFat: profile.targetFat,
+            targetCalories: profile.targetCalories,
+            targetProtein: profile.targetProtein,
+            targetCarbs: profile.targetCarbs,
+            targetFat: profile.targetFat,
 
-          firstName: profile.firstName,
-          middleName: profile.middleName,
-          lastName: profile.lastName,
-        });
+            firstName: profile.firstName,
+            middleName: profile.middleName,
+            lastName: profile.lastName,
+          },
+          {
+            emitEvent: false,
+          },
+        );
 
-        this.isLoading = false;
+        // ==========================================
+        // STOP GLOBAL LOADING
+        // ==========================================
+
+        this.loadingService.stop();
       },
 
       error: (error) => {
         console.error('Failed to load profile:', error);
 
-        this.isLoading = false;
+        // ==========================================
+        // STOP GLOBAL LOADING
+        // ==========================================
+
+        this.loadingService.stop();
       },
     });
   }
@@ -290,28 +314,38 @@ export class Profile implements OnInit {
     const activityLevelId = this.profileForm.get('activityLevelId')?.value;
     const goalId = this.profileForm.get('fitnessGoalId')?.value;
 
-    // Don't call API if required values are missing
+    // ==========================================
+    // VALIDATE REQUIRED VALUES
+    // ==========================================
+
     if (!birthdate || !gender || !height || !weight || !activityLevelId || !goalId) {
       return;
     }
 
+    // ==========================================
+    // COMPUTE PROFILE REQUEST
+    // ==========================================
+
     const request: ComputeProfileRequest = {
       birthDate: birthdate,
-
       gender: gender,
-
       height: Number(height),
-
       weight: Number(weight),
-
       activityLevelId: activityLevelId,
-
       goalId: goalId,
     };
 
     console.log('COMPUTE PROFILE REQUEST:', request);
 
-    this.isLoading = true;
+    // ==========================================
+    // START GLOBAL LOADING
+    // ==========================================
+
+    this.loadingService.start();
+
+    // ==========================================
+    // CALL COMPUTE API
+    // ==========================================
 
     this.profileService.computeTargets(request).subscribe({
       next: (response: ComputeProfileResponse) => {
@@ -320,34 +354,46 @@ export class Profile implements OnInit {
         // ==========================================
         // UPDATE FORM WITH API RESPONSE
         // ==========================================
+        this.profileForm.patchValue(
+          {
+            age: response.age,
 
-        this.profileForm.patchValue({
-          age: response.age,
+            gender: response.gender,
 
-          gender: response.gender,
+            height: response.height,
 
-          height: response.height,
+            weight: response.weight,
 
-          weight: response.weight,
+            currentBMI: this.calculateBMI(response.height, response.weight),
 
-          currentBMI: this.calculateBMI(response.height, response.weight),
+            targetCalories: response.targetCalories,
 
-          targetCalories: response.targetCalories,
+            targetProtein: response.targetProtein,
 
-          targetProtein: response.targetProtein,
+            targetFat: response.targetFat,
 
-          targetFat: response.targetFat,
+            targetCarbs: response.targetCarbs,
+          },
+          {
+            emitEvent: false,
+          },
+        );
 
-          targetCarbs: response.targetCarbs,
-        });
+        // ==========================================
+        // STOP GLOBAL LOADING
+        // ==========================================
 
-        this.isLoading = false;
+        this.loadingService.stop();
       },
 
       error: (error) => {
         console.error('Failed to compute profile targets.', error);
 
-        this.isLoading = false;
+        // ==========================================
+        // STOP GLOBAL LOADING
+        // ==========================================
+
+        this.loadingService.stop();
       },
     });
   }
@@ -370,14 +416,120 @@ export class Profile implements OnInit {
   // SAVE / UPDATE
   // =========================
 
+  // =========================
+  // SAVE / UPDATE
+  // =========================
+
   saveProfile(): void {
-    // getRawValue() para makuha pati
-    // disabled fields kung kailangan later.
+    // Get raw form values.
+    // getRawValue() para makuha pati disabled fields kung kailangan later.
     const formValue = this.profileForm.getRawValue();
+    const username = this.authService.getUsername();
+
+    // Siguraduhin na may username bago magpatuloy.
+    if (!username) {
+      console.error('Username not found.');
+      return;
+    }
 
     console.log('PROFILE FORM:', formValue);
 
-    // Dito natin ilalagay later ang
-    // updateProfile() API call.
+    const request: UpdateProfileRequest = {
+      birthdate: formValue.birthdate,
+      age: formValue.age,
+      gender: formValue.gender,
+
+      height: formValue.height,
+      weight: formValue.weight,
+      currentBMI: formValue.currentBMI,
+
+      activityLevelId: formValue.activityLevelId,
+      fitnessGoalId: formValue.fitnessGoalId,
+
+      monthlyIncome: formValue.monthlyIncome,
+      savingsGoal: formValue.savingsGoal,
+      currentSavings: formValue.currentSavings,
+
+      targetCalories: formValue.targetCalories,
+      targetProtein: formValue.targetProtein,
+      targetCarbs: formValue.targetCarbs,
+      targetFat: formValue.targetFat,
+
+      firstName: formValue.firstName,
+      middleName: formValue.middleName,
+      lastName: formValue.lastName,
+    };
+
+    console.log('UPDATE PROFILE REQUEST:', request);
+
+    // Ipakita muna ang confirmation dialog bago baguhin ang profile.
+    const dialogRef = this.dialog.open(ConfirmDialog, {
+      width: '400px',
+      disableClose: true,
+      data: {
+        title: 'Update Profile?',
+        message: 'Are you sure you want to save these changes to your profile?',
+        icon: '👤',
+        confirmText: 'Update Profile',
+        cancelText: 'Cancel',
+      },
+    });
+
+    // Hintayin kung pinindot ng user ang Confirm o Cancel.
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      // Kapag Cancel, walang gagawin.
+      if (!confirmed) {
+        return;
+      }
+
+      // Kapag Confirm, saka lang tatawagin ang API.
+      this.submitUpdateProfile(username, request);
+    });
+  }
+
+  // =========================
+  // SUBMIT UPDATE PROFILE
+  // =========================
+
+  private submitUpdateProfile(username: string, request: UpdateProfileRequest): void {
+    // ==========================================
+    // START GLOBAL LOADING
+    // ==========================================
+
+    this.loadingService.start();
+
+    this.profileService
+      .updateProfile(username, request)
+      .pipe(
+        finalize(() => {
+          // ==========================================
+          // STOP GLOBAL LOADING
+          // ==========================================
+
+          this.loadingService.stop();
+        }),
+      )
+      .subscribe({
+        next: (response) => {
+          console.log('PROFILE UPDATED:', response);
+          // ==========================================
+          // SHOW SAVED MESSAGE
+          // ==========================================
+
+          this.showSaved.set(true);
+
+          // ==========================================
+          // HIDE SAVED MESSAGE AFTER 2.5 SECONDS
+          // ==========================================
+
+          setTimeout(() => {
+            this.showSaved.set(false);
+          }, 2500);
+        },
+
+        error: (error) => {
+          console.error('UPDATE PROFILE ERROR:', error);
+        },
+      });
   }
 }

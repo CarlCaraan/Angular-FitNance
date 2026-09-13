@@ -5,10 +5,12 @@ import { Sidebar } from '../../components/sidebar/sidebar';
 import { ThemeService } from '../../services/theme/user-theme.service';
 import { AuthService } from '../../services/authentication/auth.service';
 import { UserTheme } from '../../models/theme/user-theme';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { LoadingService } from '../../services/loading/loading.service';
 
 @Component({
   selector: 'app-main-layout',
-  imports: [RouterOutlet, Sidebar],
+  imports: [RouterOutlet, Sidebar, MatProgressBarModule],
   templateUrl: './main-layout.html',
   styleUrl: './main-layout.css',
 })
@@ -16,6 +18,7 @@ export class MainLayout implements OnInit {
   constructor(
     private themeService: ThemeService,
     private authService: AuthService,
+    public loadingService: LoadingService,
   ) {}
 
   ngOnInit(): void {
