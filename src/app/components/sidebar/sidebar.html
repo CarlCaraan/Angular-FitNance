@@ -1,0 +1,118 @@
+<aside class="h-full flex flex-col transition-all duration-300 border-r" [class.w-64]="!isCollapsed"
+  [class.w-20]="isCollapsed" style="
+    background-color: var(--surface-color);
+    border-color: var(--border-color);
+    color: var(--primary-font-color);
+  ">
+  <!-- ========================================= -->
+  <!-- HEADER -->
+  <!-- ========================================= -->
+
+  <div class="h-16 flex items-center justify-between px-4 border-b" style="border-color: var(--secondary-color);">
+
+    <!-- Logo -->
+
+    @if (!isCollapsed) {
+
+    <h1 class="text-2xl font-bold text-[var(--primary-font-color)]">
+      Fit<span class="text-[var(--secondary-color)]">Nance</span>
+    </h1>
+
+    } @else {
+
+    <span class="text-xl font-bold text-[var(--primary-font-color)]">
+      F
+    </span>
+
+    }
+
+    <!-- Toggle Button -->
+
+    <button type="button" (click)="toggleSidebar()" class="p-2 rounded-lg transition"
+      style="color: var(--primary-font-color);" onmouseover="this.style.backgroundColor='var(--secondary-color)'"
+      onmouseout="this.style.backgroundColor='transparent'">
+      ☰
+    </button>
+
+  </div>
+
+
+  <!-- ========================================= -->
+  <!-- NAVIGATION -->
+  <!-- ========================================= -->
+
+  <nav class="flex-1 p-3">
+
+    <!-- Dashboard -->
+
+    <a routerLink="/dashboard" routerLinkActive="bg-[var(--secondary-color)]"
+      [routerLinkActiveOptions]="{ exact: true }" class="flex items-center gap-3 px-3 py-3 rounded-lg transition"
+      style="color: var(--primary-font-color);">
+      <span>🏠</span>
+
+      @if (!isCollapsed) {
+      <span>Dashboard</span>
+      }
+    </a>
+
+
+    <!-- Profile -->
+
+    <a routerLink="/profile" routerLinkActive="bg-[var(--secondary-color)]"
+      outerLinkActive="bg-[var(--secondary-color)]" [routerLinkActiveOptions]="{ exact: true }"
+      class="flex items-center gap-3 px-3 py-3 rounded-lg transition" style="color: var(--primary-font-color);">
+      <span>👤</span>
+
+      @if (!isCollapsed) {
+      <span>Profile</span>
+      }
+
+    </a>
+
+
+    <!-- Progress -->
+
+    <a routerLink="/progress" routerLinkActive="bg-[var(--secondary-color)]" [routerLinkActiveOptions]="{ exact: true }"
+      class="flex items-center gap-3 px-3 py-3 rounded-lg transition" style="color: var(--primary-font-color);">
+      <span>📊</span>
+
+      @if (!isCollapsed) {
+      <span>Progress</span>
+      }
+    </a>
+
+
+    <!-- Settings -->
+
+    <a routerLink="/settings" routerLinkActive="bg-[var(--secondary-color)]" [routerLinkActiveOptions]="{ exact: true }"
+      class="flex items-center gap-3 px-3 py-3 rounded-lg transition" style="color: var(--primary-font-color);">
+      <span>⚙️</span>
+
+      @if (!isCollapsed) {
+      <span>Settings</span>
+      }
+    </a>
+
+  </nav>
+
+
+  <!-- ========================================= -->
+  <!-- LOGOUT -->
+  <!-- ========================================= -->
+
+  <div class="p-3 border-t" style="border-color: var(--secondary-color);">
+
+    <button type="button" (click)="logout()" class="w-full flex items-center gap-3 px-3 py-3 rounded-lg transition"
+      style="color: var(--primary-font-color);" onmouseover="this.style.backgroundColor='var(--secondary-color)'"
+      onmouseout="this.style.backgroundColor='transparent'">
+      <span>🚪</span>
+
+      @if (!isCollapsed) {
+      <span>Logout</span>
+      }
+
+    </button>
+
+  </div>
+
+</aside>

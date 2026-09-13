@@ -1,0 +1,110 @@
+.profile-theme {
+  --page-bg: #f3f4f6;
+  --card-bg: #ffffff;
+  --input-bg: #ffffff;
+  --border-color: #e5e7eb;
+}
+
+.profile-theme.dark-theme {
+  --page-bg: #111827;
+  --card-bg: #1f2937;
+  --input-bg: #374151;
+  --border-color: #374151;
+}
+
+.profile-theme {
+  background-color: var(--page-bg);
+  color: var(--text-secondary);
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.profile-card {
+  background-color: var(--card-bg);
+  color: var(--text-secondary);
+  border-color: var(--border-color);
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+.profile-title {
+  color: var(--text-primary);
+}
+.profile-title-secondary {
+  color: var(--text-secondary);
+}
+
+.theme-option {
+  background-color: var(--card-bg);
+  border-color: var(--border-color);
+  color: var(--text-secondary);
+}
+
+.theme-option:hover {
+  border-color: var(--primary-color);
+}
+
+.theme-option.selected {
+  border-color: var(--primary-color);
+  background-color: color-mix(in srgb, var(--primary-color) 10%, var(--card-bg));
+}
+
+.theme-select {
+  background-color: color-mix(in srgb, var(--primary-color) 10%);
+  color: var(--text-secondary);
+}
+
+.theme-select option {
+  background-color: var(--border-color);
+  color: var(--text-secondary);
+}
+
+.step-number {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.75rem;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.step-active {
+  background-color: var(--primary-color);
+  color: #ffffff;
+}
+
+.step-inactive {
+  background-color: #e5e7eb;
+  color: #6b7280;
+}
+
+.step-line {
+  width: 2rem;
+  height: 1px;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.step-line-active {
+  background-color: var(--primary-color);
+}
+
+.step-line-inactive {
+  background-color: #d1d5db;
+}
+
+@media (min-width: 768px) {
+  .step-line {
+    width: 3rem;
+  }
+}

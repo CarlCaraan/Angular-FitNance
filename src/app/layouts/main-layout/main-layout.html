@@ -1,0 +1,35 @@
+<div class="flex h-dvh overflow-hidden bg-[var(--background-color)]">
+
+  <!-- ========================================= -->
+  <!-- SIDEBAR -->
+  <!-- ========================================= -->
+
+  <app-sidebar class="h-full shrink-0"></app-sidebar>
+
+
+  <!-- ========================================= -->
+  <!-- MAIN CONTENT -->
+  <!-- ========================================= -->
+
+  <main class="h-full flex-1 min-w-0 overflow-y-auto">
+
+    <!--
+            Dito ilalagay ng Angular ang
+            current page.
+
+            Example:
+
+            /dashboard
+                ↓
+            Dashboard component
+
+            /profile
+                ↓
+            Profile component
+        -->
+
+    <router-outlet></router-outlet>
+
+  </main>
+
+</div>

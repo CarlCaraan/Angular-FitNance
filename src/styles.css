@@ -1,0 +1,28 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import 'tailwindcss';
+
+:root {
+  --primary-color: #10b981;
+  --secondary-color: #059669;
+
+  --primary-font-color: #000000;
+  --secondary-font-color: #6b7280;
+
+  --accent-color: #84cc16;
+
+  --background-color: #f3f4f6;
+  --surface-color: #ffffff;
+  --border-color: #e5e7eb;
+}
+
+.dark {
+  --background-color: #111827;
+  --surface-color: #1f2937;
+  --border-color: #374151;
+}
+
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  background-color: var(--surface-color) !important;
+  color: var(--primary-font-color) !important;
+}

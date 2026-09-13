@@ -1,0 +1,29 @@
+<div class="p-6 text-center bg-[var(--surface-color)] text-[var(--primary-font-color)]">
+
+    <div class="text-4xl mb-3">
+        {{ data.icon || '❓' }}
+    </div>
+
+    <h2 class="text-lg font-bold text-[var(--primary-font-color)]">
+        {{ data.title }}
+    </h2>
+
+    <p class="text-sm text-[var(--secondary-font-color)] mt-2">
+        {{ data.message }}
+    </p>
+
+    <div class="flex justify-center gap-3 mt-6">
+
+        <button mat-button [mat-dialog-close]="false"
+            class="!text-[var(--secondary-font-color)] hover:!bg-[var(--hover-color)]">
+            {{ data.cancelText || 'Cancel' }}
+        </button>
+
+        <button mat-flat-button [mat-dialog-close]="true"
+            class="!bg-[var(--primary-color)] !text-white hover:!opacity-90">
+            {{ data.confirmText || 'Confirm' }}
+        </button>
+
+    </div>
+
+</div>

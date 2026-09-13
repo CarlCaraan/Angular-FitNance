@@ -1,0 +1,1918 @@
+@if (isLoading) {
+<div class="fixed top-0 left-0 w-full z-50">
+  <mat-progress-bar mode="indeterminate">
+  </mat-progress-bar>
+</div>
+}
+<div class="profile-theme min-h-screen px-4 py-5" [class.dark-theme]="isDarkMode">
+
+  <div class="w-full max-w-4xl mx-auto">
+
+    <!-- ========================= -->
+    <!-- WELCOME -->
+    <!-- ========================= -->
+
+    <div class="text-center mb-5">
+
+      <p class="text-xs font-semibold profile-title-secondary mb-1">
+        PROFILE SETUP
+      </p>
+
+      <h1 class="text-2xl md:text-3xl font-bold profile-title">
+        Let's get to know you!
+      </h1>
+
+      <p class="text-xs italic profile-title-secondary mt-2">
+        Tell us a little about yourself to personalize your FitNance experience.
+      </p>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- STEP INDICATOR -->
+    <!-- ========================= -->
+    <div class="flex items-center justify-center mb-5">
+      <!-- STEP 1 -->
+      <div class="flex items-center">
+        <div class="step-number" [class.step-active]="currentStep >= 1" [class.step-inactive]="currentStep < 1">
+          @if (currentStep > 1) {
+          ✓
+          } @else {
+          1
+          }
+        </div>
+        <span class="ml-2 text-xs transition-colors duration-200" [class.font-semibold]="currentStep === 1"
+          [class.profile-title]="currentStep === 1" [class.text-gray-400]="currentStep !== 1">User Info</span>
+      </div>
+      <div class="step-line" [class.step-line-active]="currentStep > 1" [class.step-line-inactive]="currentStep <= 1">
+      </div>
+      <!-- STEP 2 -->
+      <div class="flex items-center">
+        <div class="step-number" [class.step-active]="currentStep >= 2" [class.step-inactive]="currentStep < 2">
+          @if (currentStep > 2) {
+          ✓
+          } @else {
+          2
+          }
+        </div>
+        <span class="ml-2 text-xs transition-colors duration-200" [class.font-semibold]="currentStep === 2"
+          [class.profile-title]="currentStep === 2" [class.text-gray-400]="currentStep !== 2">Fitness Goal</span>
+      </div>
+      <div class="step-line" [class.step-line-active]="currentStep > 2" [class.step-line-inactive]="currentStep <= 2">
+      </div>
+      <!-- STEP 3 -->
+      <div class="flex items-center">
+        <div class="step-number" [class.step-active]="currentStep >= 3" [class.step-inactive]="currentStep < 3">
+          @if (currentStep > 3) {
+          ✓
+          } @else {
+          3
+          }
+        </div>
+        <span class="ml-2 text-xs transition-colors duration-200" [class.font-semibold]="currentStep === 3"
+          [class.profile-title]="currentStep === 3" [class.text-gray-400]="currentStep !== 3">Activity Level</span>
+      </div>
+      <div class="step-line" [class.step-line-active]="currentStep > 3" [class.step-line-inactive]="currentStep <= 3">
+      </div>
+      <!-- STEP 4 -->
+      <div class="flex items-center">
+        <div class="step-number" [class.step-active]="currentStep >= 4" [class.step-inactive]="currentStep < 4">
+          @if (currentStep > 4) {
+          ✓
+          } @else {
+          4
+          }
+        </div>
+        <span class="ml-2 text-xs transition-colors duration-200" [class.font-semibold]="currentStep === 4"
+          [class.profile-title]="currentStep === 4" [class.text-gray-400]="currentStep !== 4">Finance Goal</span>
+      </div>
+      <div class="step-line" [class.step-line-active]="currentStep > 4" [class.step-line-inactive]="currentStep <= 4">
+      </div>
+      <!-- STEP 5 -->
+      <div class="flex items-center">
+        <div class="step-number" [class.step-active]="currentStep >= 5" [class.step-inactive]="currentStep < 5">
+          @if (currentStep > 5) {
+          ✓
+          } @else {
+          5
+          }
+        </div>
+        <span class="ml-2 text-xs transition-colors duration-200" [class.font-semibold]="currentStep === 5"
+          [class.profile-title]="currentStep === 5" [class.text-gray-400]="currentStep !== 5">System Theme</span>
+      </div>
+      <div class="step-line" [class.step-line-active]="currentStep > 5" [class.step-line-inactive]="currentStep <= 5">
+      </div>
+      <!-- STEP 6 -->
+      <div class="flex items-center">
+        <div class="step-number" [class.step-active]="currentStep >= 6" [class.step-inactive]="currentStep < 6">
+          @if (currentStep > 6) {
+          ✓
+          } @else {
+          6
+          }
+        </div>
+        <span class="ml-2 text-xs transition-colors duration-200" [class.font-semibold]="currentStep === 6"
+          [class.profile-title]="currentStep === 6" [class.text-gray-400]="currentStep !== 6">Result</span>
+      </div>
+    </div>
+
+    <!-- ========================= -->
+    <!-- FORM CARD -->
+    <!-- ========================= -->
+
+    <form [formGroup]="profileForm" (ngSubmit)="nextStep()" class="profile-card rounded-2xl shadow-lg p-5 md:p-6">
+      @if (currentStep === 1) {
+      <!-- Section Header -->
+
+      <div class="mb-5">
+
+        <h2 class="text-lg font-bold profile-title">
+          User Information
+        </h2>
+
+        <p class="text-xs profile-title-secondary mt-1">
+          Let's start with some basic information about you.
+        </p>
+
+      </div>
+
+
+      <!-- ========================= -->
+      <!-- NAME -->
+      <!-- ========================= -->
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+        <!-- First Name -->
+        <div>
+          <label for="firstName" class="block text-xs font-medium
+               profile-title mb-1.5">
+            First Name
+          </label>
+
+          <input id="firstName" type="text" formControlName="firstName" placeholder="Enter first name" class="w-full px-3 py-2.5 text-sm
+               border border-gray-300 rounded-lg
+               focus:outline-none focus:ring-2
+               focus:ring-[var(--primary-color)]
+               focus:border-[var(--primary-color)]" />
+
+          @if (
+          profileForm.get('firstName')?.invalid &&
+          profileForm.get('firstName')?.touched
+          ) {
+          <p class="mt-1 text-xs text-red-500">
+            First name is required.
+          </p>
+          }
+        </div>
+
+
+        <!-- Last Name -->
+        <div>
+          <label for="lastName" class="block text-xs font-medium
+               profile-title mb-1.5">
+            Last Name
+          </label>
+
+          <input id="lastName" type="text" formControlName="lastName" placeholder="Enter last name" class="w-full px-3 py-2.5 text-sm
+               border border-gray-300 rounded-lg
+               focus:outline-none focus:ring-2
+               focus:ring-[var(--primary-color)]
+               focus:border-[var(--primary-color)]" />
+
+          @if (
+          profileForm.get('lastName')?.invalid &&
+          profileForm.get('lastName')?.touched
+          ) {
+          <p class="mt-1 text-xs text-red-500">
+            Last name is required.
+          </p>
+          }
+        </div>
+
+
+        <!-- Middle Name -->
+
+        <div>
+
+          <label for="middleName" class="block text-xs font-medium
+                               profile-title mb-1.5">
+            Middle Name
+            <span class="text-gray-400 font-normal">
+              (Optional)
+            </span>
+          </label>
+
+          <input id="middleName" type="text" placeholder="Enter middle name" class="w-full px-3 py-2.5 text-sm
+                               border border-gray-300 rounded-lg
+                               focus:outline-none focus:ring-2
+                               focus:ring-[var(--primary-color)]
+                               focus:border-[var(--primary-color)]" />
+
+        </div>
+
+      </div>
+
+
+      <!-- ========================= -->
+      <!-- BIRTH DATE / AGE / GENDER -->
+      <!-- ========================= -->
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+
+        <!-- Birth Date -->
+        <div>
+          <label for="birthDate" class="block text-xs font-medium
+               profile-title mb-1.5">
+            Birth Date
+          </label>
+
+          <input id="birthDate" type="date" formControlName="birthDate" class="w-full px-3 py-2.5 text-sm
+               border border-gray-300 rounded-lg
+               focus:outline-none focus:ring-2
+               focus:ring-[var(--primary-color)]
+               focus:border-[var(--primary-color)]" />
+
+          @if (
+          profileForm.get('birthDate')?.invalid &&
+          profileForm.get('birthDate')?.touched
+          ) {
+          <p class="mt-1 text-xs text-red-500">
+            Birth date is required.
+          </p>
+          }
+        </div>
+
+
+        <!-- Age -->
+
+        <div>
+
+          <label for="age" class="block text-xs font-medium
+                               profile-title mb-1.5">
+            Age
+          </label>
+
+          <div class="relative">
+
+            <input id="age" type="text" formControlName="age" readonly class="w-full px-3 py-2.5 text-sm
+           border border-gray-200 rounded-lg
+            text-gray-500
+           focus:outline-none" />
+
+            <span class="absolute right-3 top-1/2
+                                   -translate-y-1/2
+                                   text-[10px] text-gray-400">
+              Automatic
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <!-- Gender -->
+
+        <div>
+
+          <label for="gender" class="block text-xs font-medium
+                               profile-title mb-1.5">
+            Gender
+          </label>
+
+          <select id="gender" formControlName="gender" class="theme-select w-full px-3 py-2.5 text-sm
+                               border border-gray-300 rounded-lg
+                               focus:outline-none focus:ring-2
+                               focus:ring-[var(--primary-color)]
+                               focus:border-[var(--primary-color)]">
+
+            <option value="">
+              Select gender
+            </option>
+
+            <option value="male">
+              Male
+            </option>
+
+            <option value="female">
+              Female
+            </option>
+
+            <option value="bading">
+              Bading
+            </option>
+
+          </select>
+          @if (
+          profileForm.get('gender')?.invalid &&
+          profileForm.get('gender')?.touched
+          ) {
+          <p class="mt-1 text-xs text-red-500">
+            Gender is required.
+          </p>
+          }
+
+        </div>
+
+
+        <!-- Height -->
+
+        <div>
+
+          <label for="height" class="block text-xs font-medium
+               profile-title mb-1.5">
+            Height
+          </label>
+
+          <div class="relative">
+
+            <input id="height" type="number" formControlName="height" placeholder="Enter height" class="w-full px-3 py-2.5 pr-12 text-sm
+                   border border-gray-300 rounded-lg
+                   focus:outline-none focus:ring-2
+                   focus:ring-[var(--primary-color)]
+                   focus:border-[var(--primary-color)]" />
+
+            @if (
+            profileForm.get('height')?.invalid &&
+            profileForm.get('height')?.touched
+            ) {
+            <p class="mt-1 text-xs text-red-500">
+              Height is required.
+            </p>
+            }
+
+            <span class="absolute right-3 top-1/2
+                   -translate-y-1/2
+                   text-xs text-gray-400">
+              cm
+            </span>
+
+          </div>
+
+        </div>
+
+        <!-- Weight -->
+
+        <div>
+
+          <label for="weight" class="block text-xs font-medium
+               profile-title mb-1.5">
+            Weight
+          </label>
+
+          <div class="relative">
+
+            <input id="weight" type="number" formControlName="weight" placeholder="Enter weight" class="w-full px-3 py-2.5 pr-12 text-sm
+                   border border-gray-300 rounded-lg
+                   focus:outline-none focus:ring-2
+                   focus:ring-[var(--primary-color)]
+                   focus:border-[var(--primary-color)]" />
+
+            @if (
+            profileForm.get('weight')?.invalid &&
+            profileForm.get('weight')?.touched
+            ) {
+            <p class="mt-1 text-xs text-red-500">
+              Weight is required.
+            </p>
+            }
+
+            <span class="absolute right-3 top-1/2
+                   -translate-y-1/2
+                   text-xs text-gray-400">
+              kg
+            </span>
+
+          </div>
+
+        </div>
+
+
+      </div>
+
+
+      <!-- ========================= -->
+      <!-- BMI SUMMARY -->
+      <!-- ========================= -->
+
+      <div class="mt-5 pt-4 border-t border-gray-100">
+
+        <div class="flex items-center justify-between
+              border rounded-xl px-4 py-3">
+
+          <div>
+
+            <div class="flex items-center gap-1.5">
+
+              <p class="text-xs font-medium profile-title-secondary">
+                Current BMI
+              </p>
+
+              <!-- INFO ICON -->
+              <div class="relative group">
+
+                <span class="flex items-center justify-center
+                   w-4 h-4
+                   rounded-full
+                   border border-gray-400
+                   text-[9px] font-bold
+                   text-gray-500
+                   cursor-help">
+
+                  i
+
+                </span>
+
+
+                <!-- TOOLTIP -->
+                <div class="absolute
+                   bottom-full
+                   left-1/2
+                   -translate-x-1/2
+                   mb-2
+                   w-64
+                   p-3
+                   bg-gray-800
+                   text-white
+                   rounded-lg
+                   shadow-lg
+                   text-left
+                   opacity-0
+                   invisible
+                   group-hover:opacity-100
+                   group-hover:visible
+                   transition-all
+                   duration-200
+                   z-50">
+
+                  <p class="text-xs font-semibold mb-2">
+                    International WHO Categories
+                  </p>
+
+
+                  <div class="space-y-1.5 text-[10px]">
+
+                    <div class="flex justify-between gap-3">
+                      <span>0 – 16.0</span>
+                      <span class="font-medium">
+                        Severely underweight
+                      </span>
+                    </div>
+
+                    <div class="flex justify-between gap-3">
+                      <span>16.1 – 18.5</span>
+                      <span class="font-medium">
+                        Underweight
+                      </span>
+                    </div>
+
+                    <div class="flex justify-between gap-3">
+                      <span>18.6 – 25</span>
+                      <span class="font-medium">
+                        Normal
+                      </span>
+                    </div>
+
+                    <div class="flex justify-between gap-3">
+                      <span>25.1 – 30</span>
+                      <span class="font-medium">
+                        Overweight
+                      </span>
+                    </div>
+
+                    <div class="flex justify-between gap-3">
+                      <span>30.1 – 35</span>
+                      <span class="font-medium">
+                        Obese
+                      </span>
+                    </div>
+
+                  </div>
+
+
+                  <!-- TOOLTIP ARROW -->
+                  <div class="absolute
+                     top-full
+                     left-1/2
+                     -translate-x-1/2
+                     border-4
+                     border-transparent
+                     border-t-gray-800">
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <p class="text-[10px] text-gray-400 mt-0.5">
+              Based on your height and weight
+            </p>
+
+          </div>
+
+
+          <!-- ========================= -->
+          <!-- BMI VALUE + STATUS -->
+          <!-- ========================= -->
+
+          <div class="flex items-center gap-3">
+
+            <!-- BMI -->
+            <p class="text-xl font-bold
+                profile-title">
+
+              {{ profileForm.get('bmi')?.value || '--' }}
+
+            </p>
+
+
+            <!-- STATUS -->
+            <span class="px-2.5 py-1
+               rounded-full
+               text-[10px]
+               font-semibold
+               bg-green-100
+               text-green-700">
+
+              {{ profileForm.get('bmiStatus')?.value || '--' }}
+
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ========================= -->
+      <!-- ACTION -->
+      <!-- ========================= -->
+
+      <div class="flex justify-end
+                       mt-5 pt-4 border-t border-gray-100">
+
+        <button type="submit" class="px-5 py-2.5
+                 rounded-lg
+                 bg-[var(--primary-color)]
+                 text-white
+                 text-sm
+                 font-semibold
+                 hover:bg-[var(--secondary-color)]
+                 transition">
+          Next →
+        </button>
+
+      </div>
+      }
+
+
+
+
+
+
+
+
+
+
+      <!-- ========================= -->
+      <!-- STEP 2 - FITNESS GOAL -->
+      <!-- ========================= -->
+
+      @if (currentStep === 2) {
+
+      <div>
+
+        <!-- HEADER -->
+
+        <div class="mb-5">
+
+          <p class="text-[10px] font-semibold
+               tracking-wider
+               text-[var(--primary-color)]">
+
+            STEP 2 OF 7
+
+          </p>
+
+          <h2 class="text-xl font-bold
+               profile-title">
+
+            Set Your Fitness Goal
+
+          </h2>
+
+          <p class="text-xs text-gray-400 mt-1">
+
+            What would you like to achieve with FitNance?
+
+          </p>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- FITNESS GOALS -->
+        <!-- ========================= -->
+
+        <div class="space-y-2">
+
+          @for (
+          goal of nutritionGoals;
+          track goal.goalId
+          ) {
+
+          <button type="button" (click)="
+    profileForm
+      .get('fitnessGoal')
+      ?.setValue(goal.goalId)
+  " class="theme-option
+         w-full
+         text-left
+         border
+         rounded-xl
+         p-4
+         transition" [class.selected]="
+    profileForm.get('fitnessGoal')?.value ===
+    goal.goalId
+  ">
+
+            <p class="text-sm font-semibold
+                 profile-title">
+              {{ goal.goalName }}
+            </p>
+
+            <p class="text-xs text-gray-400 mt-1">
+              {{ goal.description }}
+            </p>
+
+          </button>
+
+          }
+
+
+          @if (
+          profileForm.get('fitnessGoal')?.invalid &&
+          profileForm.get('fitnessGoal')?.touched
+          ) {
+          <p class="mt-2 text-xs text-red-500">
+            Please select your fitness goal.
+          </p>
+          }
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- NAVIGATION -->
+        <!-- ========================= -->
+
+        <div class="flex justify-between mt-6">
+
+          <!-- BACK -->
+
+          <button type="button" (click)="previousStep()" class="px-4 py-2.5
+               rounded-lg
+               border border-gray-200
+               text-gray-500
+               text-sm
+               font-medium
+               hover:bg-gray-50
+               transition">
+
+            ← Back
+
+          </button>
+
+
+          <!-- NEXT -->
+
+          <button type="button" (click)="nextStep()" class="px-5 py-2.5
+               rounded-lg
+               bg-[var(--primary-color)]
+               text-white
+               text-sm
+               font-semibold
+               hover:bg-[var(--secondary-color)]
+               transition">
+
+            Next →
+
+          </button>
+
+        </div>
+
+      </div>
+
+      }
+
+
+
+
+      <!-- ========================= -->
+      <!-- STEP 3 ACTIVITY LEVEL -->
+      <!-- ========================= -->
+      @if (currentStep === 3) {
+
+      <div>
+
+        <!-- Header -->
+        <div class="mb-4">
+
+          <p class="text-[10px] font-semibold tracking-wider
+                  text-[var(--primary-color)]">
+            STEP 3 OF 6
+          </p>
+
+          <h2 class="text-xl font-bold
+                   profile-title">
+            Set Your Activity Level
+          </h2>
+
+          <p class="text-xs text-gray-400 mt-0.5">
+            How active are you on a typical week?
+          </p>
+
+        </div>
+
+
+        <!-- Activity Level Options -->
+        <div class="space-y-2">
+
+          @for (activity of activityLevels; track activity.activityLevelId) {
+
+          <button type="button" (click)="
+  profileForm
+    .get('activityLevel')
+    ?.setValue(activity.activityLevelId)
+" class="theme-option
+       w-full
+       text-left
+       border
+       rounded-xl
+       p-4
+       transition" [class.selected]="
+  profileForm.get('activityLevel')?.value ===
+  activity.activityLevelId
+">
+
+            <p class="text-sm font-semibold
+                            profile-title">
+
+              {{ activity.activityLevelName }}
+
+            </p>
+
+            <p class="text-[11px] text-gray-400 mt-0.5">
+
+              {{ activity.description }}
+
+            </p>
+
+          </button>
+
+          }
+          @if (
+          profileForm.get('fitnessGoal')?.invalid &&
+          profileForm.get('fitnessGoal')?.touched
+          ) {
+          <p class="mt-2 text-xs text-red-500">
+            Please select your fitness goal.
+          </p>
+          }
+
+        </div>
+
+
+        <!-- Validation -->
+        @if (
+        profileForm.get('activityLevel')?.invalid &&
+        profileForm.get('activityLevel')?.touched
+        ) {
+        <p class="mt-1.5 text-xs text-red-500">
+          Please select your activity level.
+        </p>
+        }
+
+
+        <!-- Buttons -->
+        <div class="flex justify-between mt-4">
+
+          <button type="button" (click)="previousStep()" class="px-4 py-2 rounded-lg
+                 border border-gray-200
+                 text-gray-500 text-sm font-medium
+                 hover:bg-gray-50 transition">
+            ← Back
+          </button>
+
+          <button type="submit" class="px-5 py-2 rounded-lg
+                 bg-[var(--primary-color)] text-white
+                 text-sm font-semibold
+                 hover:bg-[var(--secondary-color)] transition">
+            Next →
+          </button>
+
+        </div>
+
+      </div>
+
+      }
+
+
+
+      <!-- ========================= -->
+      <!-- STEP 4 - FINANCE GOAL -->
+      <!-- ========================= -->
+
+      @if (currentStep === 4) {
+
+      <div>
+
+        <!-- HEADER -->
+        <div class="mb-5">
+
+          <p class="text-[10px] font-semibold
+                tracking-wider
+                text-[var(--primary-color)]">
+            STEP 4 OF 6
+          </p>
+
+          <h2 class="text-xl font-bold
+                 profile-title">
+            Set Your Finance Goal
+          </h2>
+
+          <p class="text-xs text-gray-400 mt-1">
+            Tell us about your current financial situation.
+          </p>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- FINANCE FIELDS -->
+        <!-- ========================= -->
+
+        <div class="space-y-4">
+
+
+          <!-- MONTHLY INCOME -->
+          <div>
+
+            <label for="monthlyIncome" class="block text-xs font-medium
+                 profile-title-secondary mb-1.5">
+              Monthly Income
+            </label>
+
+            <div class="relative">
+
+              <span class="absolute left-3 top-1/2
+                   -translate-y-1/2
+                   text-sm text-gray-400">
+                ₱
+              </span>
+
+              <input id="monthlyIncome" type="number" formControlName="monthlyIncome" placeholder="0.00" min="0" class="w-full rounded-lg
+                   border border-gray-200
+                   pl-8 pr-3 py-2.5
+                   text-sm profile-title-secondary
+                   outline-none
+                   focus:border-[var(--primary-color)]
+                   focus:ring-1
+                   focus:ring-[var(--primary-color)]" />
+
+            </div>
+
+            @if (
+            profileForm.get('monthlyIncome')?.invalid &&
+            profileForm.get('monthlyIncome')?.touched
+            ) {
+            <p class="mt-1 text-xs text-red-500">
+              Monthly income is required.
+            </p>
+            }
+
+          </div>
+
+
+          <!-- SAVINGS GOAL -->
+          <div>
+
+            <label for="savingsGoal" class="block text-xs font-medium
+                 profile-title-secondary mb-1.5">
+              Savings Goal
+            </label>
+
+            <div class="relative">
+
+              <span class="absolute left-3 top-1/2
+                   -translate-y-1/2
+                   text-sm text-gray-400">
+                ₱
+              </span>
+
+              <input id="savingsGoal" type="number" formControlName="savingsGoal" placeholder="0.00" min="0" class="w-full rounded-lg
+                   border border-gray-200
+                   pl-8 pr-3 py-2.5
+                   text-sm profile-title-secondary
+                   outline-none
+                   focus:border-[var(--primary-color)]
+                   focus:ring-1
+                   focus:ring-[var(--primary-color)]" />
+
+            </div>
+
+            @if (
+            profileForm.get('savingsGoal')?.invalid &&
+            profileForm.get('savingsGoal')?.touched
+            ) {
+            <p class="mt-1 text-xs text-red-500">
+              Savings goal is required.
+            </p>
+            }
+
+          </div>
+
+
+          <!-- CURRENT SAVINGS -->
+          <div>
+
+            <label for="currentSavings" class="block text-xs font-medium
+                 profile-title-secondary mb-1.5">
+              Current Savings
+            </label>
+
+            <div class="relative">
+
+              <span class="absolute left-3 top-1/2
+                   -translate-y-1/2
+                   text-sm text-gray-400">
+                ₱
+              </span>
+
+              <input id="currentSavings" type="number" formControlName="currentSavings" placeholder="0.00" min="0"
+                class="w-full rounded-lg
+                   border border-gray-200
+                   pl-8 pr-3 py-2.5
+                   text-sm profile-title-secondary
+                   outline-none
+                   focus:border-[var(--primary-color)]
+                   focus:ring-1
+                   focus:ring-[var(--primary-color)]" />
+
+            </div>
+
+            @if (
+            profileForm.get('currentSavings')?.invalid &&
+            profileForm.get('currentSavings')?.touched
+            ) {
+            <p class="mt-1 text-xs text-red-500">
+              Current savings is required.
+            </p>
+            }
+
+          </div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- NAVIGATION -->
+        <!-- ========================= -->
+
+        <div class="flex justify-between mt-6">
+
+          <!-- BACK -->
+          <button type="button" (click)="previousStep()" class="px-4 py-2.5
+               rounded-lg
+               border border-gray-200
+               text-gray-500
+               text-sm
+               font-medium
+               hover:bg-gray-50
+               transition">
+
+            ← Back
+
+          </button>
+
+
+          <!-- NEXT -->
+          <button type="submit" class="px-5 py-2.5
+               rounded-lg
+               bg-[var(--primary-color)]
+               text-white
+               text-sm
+               font-semibold
+               hover:bg-[var(--secondary-color)]
+               transition">
+
+            Next →
+
+          </button>
+
+        </div>
+
+      </div>
+
+      }
+
+
+
+      <!-- ========================= -->
+      <!-- USERS THEME CUSTOMIZATION -->
+      <!-- ========================= -->
+
+      @if (currentStep === 5) {
+
+      <div>
+
+        <!-- ========================= -->
+        <!-- HEADER -->
+        <!-- ========================= -->
+
+        <div class="mb-6">
+
+          <p class="text-[9px]
+               font-semibold
+               tracking-wider
+               text-[var(--primary-color)]">
+            STEP 5 OF 6
+          </p>
+
+          <h1 class="text-xl
+           font-bold
+           profile-title">
+            Set Your Theme
+          </h1>
+
+          <p class="text-xs text-gray-400 mt-1">
+            Customize how FitNance looks and feels. You can change this anytime in your
+            <span class="text-[var(--primary-color)] font-medium">
+              profile settings
+            </span>.
+          </p>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- THEME PROFILE -->
+        <!-- ========================= -->
+
+        <div class="mb-6">
+
+          <p class="text-sm
+               font-semibold
+               profile-title
+               mb-3">
+            Choose Theme Profile:
+          </p>
+
+
+          <div class="space-y-2">
+
+            <!-- SYSTEM -->
+            <label class="theme-option
+         flex
+         items-center
+         gap-3
+         border
+         rounded-xl
+         p-3
+         cursor-pointer
+         transition" [class.selected]="
+    profileForm.get('themeProfile')?.value === 'system'
+  ">
+
+              <input type="radio" formControlName="themeProfile" value="system" class="accent-[var(--primary-color)]">
+
+              <span class="text-sm profile-title-secondary">
+                Use System Setting (Default)
+              </span>
+
+            </label>
+
+
+            <!-- LIGHT -->
+            <label class="theme-option
+                     flex
+                     items-center
+                     gap-3
+                     border
+                     rounded-xl
+                     p-3
+                     cursor-pointer
+                     transition" [class.selected]="
+                profileForm.get('themeProfile')?.value === 'light'
+              ">
+
+              <input type="radio" formControlName="themeProfile" value="light" class="accent-[var(--primary-color)]">
+
+              <span class="text-sm profile-title-secondary">
+                Light Mode
+              </span>
+
+            </label>
+
+
+            <!-- DARK -->
+            <label class="theme-option
+                     flex
+                     items-center
+                     gap-3
+                     border
+                     rounded-xl
+                     p-3
+                     cursor-pointer
+                     transition" [class.selected]="
+                profileForm.get('themeProfile')?.value === 'dark'
+              ">
+
+              <input type="radio" formControlName="themeProfile" value="dark" class="accent-[var(--primary-color)]">
+
+              <span class="text-sm profile-title-secondary">
+                Dark Mode
+              </span>
+
+            </label>
+
+          </div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- COLOR SETTINGS -->
+        <!-- ========================= -->
+
+        <div>
+
+          <p class="text-sm
+               font-semibold
+               profile-title
+               mb-3">
+            Color Settings:
+          </p>
+
+
+          <div class="space-y-2">
+
+            <!-- ========================= -->
+            <!-- BASIC -->
+            <!-- ========================= -->
+
+            <label class="theme-option
+         flex
+         items-center
+         gap-3
+         border
+         rounded-xl
+         p-3
+         cursor-pointer
+         transition" [class.selected]="
+    profileForm.get('colorSetting')?.value === 'basic'">
+
+              <input type="radio" formControlName="colorSetting" value="basic" class="accent-[var(--primary-color)]">
+
+              <div>
+
+                <p class="text-sm font-semibold profile-title-secondary">
+                  Use Basic Color Settings
+                </p>
+
+                <p class="text-[11px] text-gray-400 mt-0.5">
+                  Choose from predefined color profiles.
+                </p>
+
+              </div>
+
+            </label>
+
+
+            <!-- ========================= -->
+            <!-- BASIC OPTIONS -->
+            <!-- ========================= -->
+
+            @if (
+            profileForm.get('colorSetting')?.value === 'basic'
+            ) {
+
+            <div class="ml-7 space-y-2 pt-1">
+
+              <!-- HACKER GREEN -->
+              <label class="theme-option flex items-center gap-3 border rounded-lg p-3 cursor-pointer transition"
+                [class.selected]="profileForm.get('themeBasicProfile')?.value === 'hacker'">
+                <input type="radio" formControlName="themeBasicProfile" value="hacker"
+                  class="accent-[var(--primary-color)]">
+
+                <div>
+                  <p class="text-sm font-medium profile-title-secondary">
+                    Hacker (Green) Default
+                  </p>
+
+                  <div class="flex gap-1 mt-1">
+                    <span class="w-4 h-4 rounded-full bg-[#10B981]"></span>
+                    <span class="w-4 h-4 rounded-full bg-[#059669]"></span>
+                    <span class="w-4 h-4 rounded-full bg-[#84CC16]"></span>
+                  </div>
+                </div>
+              </label>
+
+              <!-- CANDY PINK -->
+              <label class="theme-option flex items-center gap-3 border rounded-lg p-3 cursor-pointer transition"
+                [class.selected]="profileForm.get('themeBasicProfile')?.value === 'candy'">
+                <input type="radio" formControlName="themeBasicProfile" value="candy"
+                  class="accent-[var(--primary-color)]">
+
+                <div>
+                  <p class="text-sm font-medium profile-title-secondary">
+                    Candy (Pink)
+                  </p>
+
+                  <div class="flex gap-1 mt-1">
+                    <span class="w-4 h-4 rounded-full bg-pink-400"></span>
+                    <span class="w-4 h-4 rounded-full bg-pink-500"></span>
+                    <span class="w-4 h-4 rounded-full bg-fuchsia-400"></span>
+                  </div>
+                </div>
+              </label>
+
+            </div>
+
+            }
+
+
+            <!-- ========================= -->
+            <!-- ADVANCED -->
+            <!-- ========================= -->
+
+            <label class="theme-option
+         flex
+         items-center
+         gap-3
+         border
+         rounded-xl
+         p-3
+         cursor-pointer
+         transition" [class.selected]="
+    profileForm.get('colorSetting')?.value === 'advanced'
+  ">
+
+              <input type="radio" formControlName="colorSetting" value="advanced" class="accent-[var(--primary-color)]">
+
+              <div>
+
+                <p class="text-sm font-semibold profile-title-secondary">
+                  Use Advanced Color Settings
+                </p>
+
+                <p class="text-[11px] text-gray-400 mt-0.5">
+                  Customize your own colors.
+                </p>
+
+              </div>
+
+            </label>
+
+          </div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- ADVANCED SETTINGS -->
+        <!-- ========================= -->
+
+        @if (
+        profileForm.get('colorSetting')?.value === 'advanced'
+        ) {
+
+        <div class="mt-4
+               border
+               border-gray-200
+               rounded-xl
+               p-4
+               space-y-4">
+
+          <!-- ========================= -->
+          <!-- PRIMARY COLOR -->
+          <!-- ========================= -->
+
+          <div>
+
+            <label class="block
+                   text-xs
+                   font-medium
+                   profile-title-secondary
+                   mb-1.5">
+              Primary Color
+            </label>
+
+            <div class="flex items-center gap-3">
+
+              <input type="color" formControlName="primaryColor" class="w-10
+                     h-10
+                     p-1
+                     border
+                     border-gray-200
+                     rounded-lg
+                     cursor-pointer">
+
+              <input type="text" formControlName="primaryColor" maxlength="7" class="flex-1
+                     border
+                     border-gray-200
+                     rounded-lg
+                     px-3
+                     py-2
+                     text-sm
+                     uppercase
+                     focus:outline-none
+                     focus:border-[var(--primary-color)]">
+
+            </div>
+
+          </div>
+
+
+          <!-- ========================= -->
+          <!-- SECONDARY COLOR -->
+          <!-- ========================= -->
+
+          <div>
+
+            <label class="block
+                   text-xs
+                   font-medium
+                   profile-title-secondary
+                   mb-1.5">
+              Secondary Color
+            </label>
+
+            <div class="flex items-center gap-3">
+
+              <input type="color" formControlName="secondaryColor" class="w-10
+                     h-10
+                     p-1
+                     border
+                     border-gray-200
+                     rounded-lg
+                     cursor-pointer">
+
+              <input type="text" formControlName="secondaryColor" maxlength="7" class="flex-1
+                     border
+                     border-gray-200
+                     rounded-lg
+                     px-3
+                     py-2
+                     text-sm
+                     uppercase
+                     focus:outline-none
+                     focus:border-[var(--primary-color)]">
+
+            </div>
+
+          </div>
+
+
+          <!-- ========================= -->
+          <!-- PRIMARY FONT COLOR -->
+          <!-- ========================= -->
+
+          <div>
+
+            <label class="block
+                   text-xs
+                   font-medium
+                   profile-title-secondary
+                   mb-1.5">
+              Primary Font Color
+            </label>
+
+            <div class="flex items-center gap-3">
+
+              <input type="color" formControlName="primaryFontColor" class="w-10
+                     h-10
+                     p-1
+                     border
+                     border-gray-200
+                     rounded-lg
+                     cursor-pointer">
+
+              <input type="text" formControlName="primaryFontColor" maxlength="7" class="flex-1
+                     border
+                     border-gray-200
+                     rounded-lg
+                     px-3
+                     py-2
+                     text-sm
+                     uppercase
+                     focus:outline-none
+                     focus:border-[var(--primary-color)]">
+
+            </div>
+
+          </div>
+
+
+          <!-- ========================= -->
+          <!-- SECONDARY FONT COLOR -->
+          <!-- ========================= -->
+
+          <div>
+
+            <label class="block
+                   text-xs
+                   font-medium
+                   profile-title-secondary
+                   mb-1.5">
+              Secondary Font Color
+            </label>
+
+            <div class="flex items-center gap-3">
+
+              <input type="color" formControlName="secondaryFontColor" class="w-10
+                     h-10
+                     p-1
+                     border
+                     border-gray-200
+                     rounded-lg
+                     cursor-pointer">
+
+              <input type="text" formControlName="secondaryFontColor" maxlength="7" class="flex-1
+                     border
+                     border-gray-200
+                     rounded-lg
+                     px-3
+                     py-2
+                     text-sm
+                     uppercase
+                     focus:outline-none
+                     focus:border-[var(--primary-color)]">
+
+            </div>
+
+          </div>
+
+
+          <!-- ========================= -->
+          <!-- ACCENT COLOR -->
+          <!-- ========================= -->
+
+          <div>
+
+            <label class="block
+                   text-xs
+                   font-medium
+                   profile-title-secondary
+                   mb-1.5">
+              Accent Color
+            </label>
+
+            <div class="flex items-center gap-3">
+
+              <input type="color" formControlName="accentColor" class="w-10
+                     h-10
+                     p-1
+                     border
+                     border-gray-200
+                     rounded-lg
+                     cursor-pointer">
+
+              <input type="text" formControlName="accentColor" maxlength="7" class="flex-1
+                     border
+                     border-gray-200
+                     rounded-lg
+                     px-3
+                     py-2
+                     text-sm
+                     uppercase
+                     focus:outline-none
+                     focus:border-[var(--primary-color)]">
+
+            </div>
+
+          </div>
+
+        </div>
+
+        }
+
+
+        <!-- ========================= -->
+        <!-- NAVIGATION -->
+        <!-- ========================= -->
+
+        <div class="flex justify-between mt-7">
+
+          <!-- BACK -->
+
+          <button type="button" (click)="previousStep()" class="px-5
+               py-2.5
+               rounded-lg
+               border
+               border-gray-200
+               text-gray-500
+               text-sm
+               font-medium
+               hover:bg-gray-50
+               transition">
+            ← Back
+          </button>
+
+
+          <!-- NEXT -->
+
+          <button type="submit" class="px-6
+               py-2.5
+               rounded-lg
+               bg-[var(--primary-color)]
+               text-white
+               text-sm
+               font-semibold
+               hover:bg-[var(--secondary-color)]
+               transition">
+            Next →
+          </button>
+
+        </div>
+
+      </div>
+
+      }
+
+
+
+      <!-- ========================= -->
+      <!-- RESULT -->
+      <!-- ========================= -->
+      @if (currentStep === 6) {
+      <div class="space-y-3">
+
+        <!-- ========================= -->
+        <!-- BASIC INFORMATION -->
+        <!-- ========================= -->
+        <div class="border border-gray-200 rounded-xl p-3.5">
+
+          <h3 class="profile-title text-sm font-semibold mb-3">
+            Basic Information
+          </h3>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-2.5">
+
+            <!-- FIRST NAME -->
+            <div>
+              <p class="profile-title-secondary text-[10px] mb-0.5">
+                First Name
+              </p>
+              <p class="profile-title text-xs font-medium">
+                {{ profileForm.get('firstName')?.value || '—' }}
+              </p>
+            </div>
+
+            <!-- LAST NAME -->
+            <div>
+              <p class="profile-title-secondary text-[10px] mb-0.5">
+                Last Name
+              </p>
+              <p class="profile-title text-xs font-medium">
+                {{ profileForm.get('lastName')?.value || '—' }}
+              </p>
+            </div>
+
+            <!-- MIDDLE NAME -->
+            <div>
+              <p class="profile-title-secondary text-[10px] mb-0.5">
+                Middle Name
+              </p>
+              <p class="profile-title text-xs font-medium">
+                {{ profileForm.get('middleName')?.value || '—' }}
+              </p>
+            </div>
+
+            <!-- BIRTH DATE -->
+            <div>
+              <p class="profile-title-secondary text-[10px] mb-0.5">
+                Birth Date
+              </p>
+              <p class="profile-title text-xs font-medium">
+                {{ profileForm.get('birthDate')?.value || '—' }}
+              </p>
+            </div>
+
+            <!-- AGE -->
+            <div>
+              <p class="profile-title-secondary text-[10px] mb-0.5">
+                Age
+              </p>
+              <p class="profile-title text-xs font-medium">
+                {{ profileForm.get('age')?.value || '—' }}
+              </p>
+            </div>
+
+            <!-- GENDER -->
+            <div>
+              <p class="profile-title-secondary text-[10px] mb-0.5">
+                Gender
+              </p>
+              <p class="profile-title text-xs font-medium">
+                {{ profileForm.get('gender')?.value || '—' }}
+              </p>
+            </div>
+
+            <!-- HEIGHT -->
+            <div>
+              <p class="profile-title-secondary text-[10px] mb-0.5">
+                Height
+              </p>
+              <p class="profile-title text-xs font-medium">
+                {{ profileForm.get('height')?.value || '—' }} cm
+              </p>
+            </div>
+
+            <!-- WEIGHT -->
+            <div>
+              <p class="profile-title-secondary text-[10px] mb-0.5">
+                Weight
+              </p>
+              <p class="profile-title text-xs font-medium">
+                {{ profileForm.get('weight')?.value || '—' }} kg
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- BMI -->
+        <!-- ========================= -->
+        <div class="border border-gray-200 rounded-xl px-3.5 py-3">
+
+          <div class="flex items-center justify-between">
+
+            <div>
+              <p class="profile-title-secondary text-[10px] mb-0.5">
+                Body Mass Index (BMI)
+              </p>
+
+              <div class="flex items-center gap-2">
+
+                <p class="profile-title text-xl font-bold">
+                  {{ profileForm.get('bmi')?.value || '—' }}
+                </p>
+
+                <!-- INFO ICON -->
+                <div class="relative group">
+
+                  <button type="button" class="w-4 h-4 flex items-center justify-center
+                     rounded-full border border-gray-400
+                     text-gray-500 text-[9px] font-semibold
+                     hover:border-[var(--primary-color)]
+                     hover:text-[var(--primary-color)]
+                     transition">
+                    i
+                  </button>
+
+                  <!-- TOOLTIP -->
+                  <div class="absolute
+                        bottom-full
+                        left-1/2
+                        -translate-x-1/2
+                        mb-2
+                        w-60
+                        p-2.5
+                        bg-gray-800
+                        text-white
+                        rounded-lg
+                        shadow-lg
+                        text-left
+                        opacity-0
+                        invisible
+                        group-hover:opacity-100
+                        group-hover:visible
+                        transition-all
+                        duration-200
+                        z-50">
+
+                    <p class="text-[10px] font-semibold mb-1.5">
+                      International WHO Categories
+                    </p>
+
+                    <div class="space-y-1 text-[9px]">
+
+                      <div class="flex justify-between gap-3">
+                        <span>0 – 16.0</span>
+                        <span class="font-medium">
+                          Severely underweight
+                        </span>
+                      </div>
+
+                      <div class="flex justify-between gap-3">
+                        <span>16.1 – 18.5</span>
+                        <span class="font-medium">
+                          Underweight
+                        </span>
+                      </div>
+
+                      <div class="flex justify-between gap-3">
+                        <span>18.6 – 25</span>
+                        <span class="font-medium">
+                          Normal
+                        </span>
+                      </div>
+
+                      <div class="flex justify-between gap-3">
+                        <span>25.1 – 30</span>
+                        <span class="font-medium">
+                          Overweight
+                        </span>
+                      </div>
+
+                      <div class="flex justify-between gap-3">
+                        <span>30.1 – 35</span>
+                        <span class="font-medium">
+                          Obese
+                        </span>
+                      </div>
+
+                    </div>
+
+                    <!-- TOOLTIP ARROW -->
+                    <div class="absolute
+                          top-full
+                          left-1/2
+                          -translate-x-1/2
+                          border-4
+                          border-transparent
+                          border-t-gray-800">
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- BMI STATUS -->
+            <span class="inline-flex
+                   items-center
+                   px-2.5
+                   py-1
+                   rounded-full
+                   text-[10px]
+                   font-semibold
+                   bg-green-100
+                   text-green-700">
+              Normal
+            </span>
+
+          </div>
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- FITNESS & NUTRITION GOAL -->
+        <!-- ========================= -->
+        <div class="border border-gray-200 rounded-xl p-3.5">
+
+          <h3 class="profile-title text-sm font-semibold">
+            Fitness & Nutrition Goal
+          </h3>
+
+          <p class="profile-title-secondary text-[10px] mt-0.5 mb-3">
+            Based on your activity level and fitness goal, these are your recommended daily nutrition targets.
+          </p>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-2.5">
+
+            <!-- ACTIVITY LEVEL -->
+            <div>
+              <p class="profile-title-secondary text-[10px] mb-0.5">
+                Activity Level
+              </p>
+              <p class="profile-title text-xs font-medium">
+                {{ activityLevelName || '—' }}
+              </p>
+            </div>
+
+            <!-- FITNESS GOAL -->
+            <div>
+              <p class="profile-title-secondary text-[10px] mb-0.5">
+                Fitness Goal
+              </p>
+              <p class="profile-title text-xs font-medium">
+                {{ goalName || '—' }}
+              </p>
+            </div>
+
+            <!-- CALORIE ADJUSTMENT -->
+            <div>
+              <p class="profile-title-secondary text-[10px] mb-0.5">
+                Calorie Adjustment
+              </p>
+              <p class="profile-title text-xs font-medium">
+                {{ calorieAdjustment ?? '—' }} kcal
+              </p>
+            </div>
+
+            <!-- TARGET CALORIES -->
+            <div>
+              <p class="profile-title-secondary text-[10px] mb-0.5">
+                Target Calories
+              </p>
+              <p class="profile-title text-xs font-medium">
+                {{ targetCalories ?? '—' }} kcal
+              </p>
+            </div>
+
+            <!-- TARGET PROTEIN -->
+            <div>
+              <p class="profile-title-secondary text-[10px] mb-0.5">
+                Target Protein
+              </p>
+              <p class="profile-title text-xs font-medium">
+                {{ targetProtein ?? '—' }} g
+              </p>
+            </div>
+
+            <!-- TARGET FAT -->
+            <div>
+              <p class="profile-title-secondary text-[10px] mb-0.5">
+                Target Fat
+              </p>
+              <p class="profile-title text-xs font-medium">
+                {{ targetFat ?? '—' }} g
+              </p>
+            </div>
+
+            <!-- TARGET CARBS -->
+            <div>
+              <p class="profile-title-secondary text-[10px] mb-0.5">
+                Target Carbs
+              </p>
+              <p class="profile-title text-xs font-medium">
+                {{ targetCarbs ?? '—' }} g
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- NAVIGATION -->
+        <!-- ========================= -->
+        <div class="flex justify-between mt-4">
+
+          <!-- BACK -->
+          <button type="button" (click)="previousStep()" class="px-4 py-2
+             rounded-lg
+             border border-gray-200
+             text-gray-500
+             text-xs
+             font-medium
+             hover:bg-gray-50
+             transition">
+            ← Back
+          </button>
+
+          <!-- COMPLETE -->
+          <button type="submit" class="px-5 py-2
+             rounded-lg
+             bg-[var(--primary-color)]
+             text-white
+             text-xs
+             font-semibold
+             hover:bg-[var(--secondary-color)]
+             transition">
+            Complete Profile
+          </button>
+
+        </div>
+
+      </div>
+      }
+
+
+
+
+
+    </form>
+
+
+    <!-- ========================= -->
+    <!-- PROGRESS -->
+    <!-- ========================= -->
+    <p class="text-center text-[10px] text-gray-400 mt-3">
+      Step {{ currentStep }} of 6
+    </p>
+
+
+
+  </div>
+
+</div>

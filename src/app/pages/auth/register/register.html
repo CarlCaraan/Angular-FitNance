@@ -1,0 +1,290 @@
+@if (isLoading) {
+<div class="fixed top-0 left-0 w-full z-50">
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>
+}
+
+<div class="min-h-screen flex items-center justify-center px-4 py-6
+         bg-[var(--background-color)]">
+  <div class="w-full max-w-md rounded-2xl shadow-lg p-6
+           bg-[var(--surface-color)]
+           border border-[var(--border-color)]">
+
+    <!-- Logo -->
+    <div class="text-center mb-6">
+
+      <h1 class="text-3xl font-bold text-[var(--primary-font-color)]">
+        Fit<span class="text-[var(--secondary-color)]">Nance</span>
+      </h1>
+
+      <p class="text-sm text-[var(--secondary-font-color)] mt-1">
+        Create your account
+      </p>
+
+    </div>
+
+
+    <!-- Register Form -->
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+      <!-- Error Message -->
+      @if (errorMessage()) {
+      <div class="mb-5 p-3 rounded-lg
+                 bg-red-50 border border-red-200
+                 flex items-center justify-between gap-3">
+
+        <p class="text-sm text-red-600">
+          {{ errorMessage() }}
+        </p>
+
+        <button type="button" (click)="errorMessage.set('')" class="text-red-400 hover:text-red-600
+                   font-bold text-lg leading-none">
+          &times;
+        </button>
+
+      </div>
+      }
+
+
+      <!-- Last Name -->
+      <div class="mb-3">
+
+        <label for="lastName" class="block text-xs font-medium
+                 text-[var(--primary-font-color)] mb-1">
+          Last Name
+        </label>
+
+        <input id="lastName" type="text" formControlName="lastName" autocomplete="family-name"
+          placeholder="Enter your last name" class="w-full px-3 py-2.5 text-sm rounded-lg
+                 bg-[var(--surface-color)]
+                 text-[var(--primary-font-color)]
+                 border border-[var(--border-color)]
+                 placeholder:text-[var(--secondary-font-color)]
+                 focus:outline-none focus:ring-2
+                 focus:ring-[var(--primary-color)]
+                 focus:border-[var(--primary-color)]" />
+
+        @if (
+        registerForm.get('lastName')?.touched &&
+        registerForm.get('lastName')?.hasError('required')
+        ) {
+        <p class="text-xs text-red-500 mt-1">
+          Last name is required.
+        </p>
+        }
+
+      </div>
+
+
+      <!-- First Name -->
+      <div class="mb-3">
+
+        <label for="firstName" class="block text-xs font-medium
+                 text-[var(--primary-font-color)] mb-1">
+          First Name
+        </label>
+
+        <input id="firstName" type="text" formControlName="firstName" autocomplete="given-name"
+          placeholder="Enter your first name" class="w-full px-3 py-2.5 text-sm rounded-lg
+                 bg-[var(--surface-color)]
+                 text-[var(--primary-font-color)]
+                 border border-[var(--border-color)]
+                 placeholder:text-[var(--secondary-font-color)]
+                 focus:outline-none focus:ring-2
+                 focus:ring-[var(--primary-color)]
+                 focus:border-[var(--primary-color)]" />
+
+        @if (
+        registerForm.get('firstName')?.touched &&
+        registerForm.get('firstName')?.hasError('required')
+        ) {
+        <p class="text-xs text-red-500 mt-1">
+          First name is required.
+        </p>
+        }
+
+      </div>
+
+
+      <!-- Middle Name -->
+      <div class="mb-3">
+
+        <label for="middleName" class="block text-xs font-medium
+                 text-[var(--primary-font-color)] mb-1">
+          Middle Name
+        </label>
+
+        <input id="middleName" type="text" formControlName="middleName" autocomplete="additional-name"
+          placeholder="Enter your middle name" class="w-full px-3 py-2.5 text-sm rounded-lg
+                 bg-[var(--surface-color)]
+                 text-[var(--primary-font-color)]
+                 border border-[var(--border-color)]
+                 placeholder:text-[var(--secondary-font-color)]
+                 focus:outline-none focus:ring-2
+                 focus:ring-[var(--primary-color)]
+                 focus:border-[var(--primary-color)]" />
+
+      </div>
+
+
+      <!-- Username -->
+      <div class="mb-3">
+
+        <label for="username" class="block text-xs font-medium
+                 text-[var(--primary-font-color)] mb-1">
+          Username
+        </label>
+
+        <input id="username" type="text" formControlName="username" autocomplete="username"
+          placeholder="Create a username" class="w-full px-3 py-2.5 text-sm rounded-lg
+                 bg-[var(--surface-color)]
+                 text-[var(--primary-font-color)]
+                 border border-[var(--border-color)]
+                 placeholder:text-[var(--secondary-font-color)]
+                 focus:outline-none focus:ring-2
+                 focus:ring-[var(--primary-color)]
+                 focus:border-[var(--primary-color)]" />
+
+        @if (registerForm.get('username')?.touched) {
+
+        @if (registerForm.get('username')?.hasError('required')) {
+        <p class="text-xs text-red-500 mt-1">
+          Username is required.
+        </p>
+        }
+
+        @if (registerForm.get('username')?.hasError('minlength')) {
+        <p class="text-xs text-red-500 mt-1">
+          Username must be at least 4 characters.
+        </p>
+        }
+
+        @if (registerForm.get('username')?.hasError('maxlength')) {
+        <p class="text-xs text-red-500 mt-1">
+          Username cannot exceed 50 characters.
+        </p>
+        }
+
+        }
+
+      </div>
+
+
+      <!-- Password -->
+      <div class="mb-3">
+
+        <label for="password" class="block text-xs font-medium
+                 text-[var(--primary-font-color)] mb-1">
+          Password
+        </label>
+
+        <input id="password" type="password" formControlName="password" autocomplete="new-password"
+          placeholder="Create a password" class="w-full px-3 py-2.5 text-sm rounded-lg
+                 bg-[var(--surface-color)]
+                 text-[var(--primary-font-color)]
+                 border border-[var(--border-color)]
+                 placeholder:text-[var(--secondary-font-color)]
+                 focus:outline-none focus:ring-2
+                 focus:ring-[var(--primary-color)]
+                 focus:border-[var(--primary-color)]" />
+
+        @if (registerForm.get('password')?.touched) {
+
+        @if (registerForm.get('password')?.hasError('required')) {
+        <p class="text-xs text-red-500 mt-1">
+          Password is required.
+        </p>
+        }
+
+        @if (registerForm.get('password')?.hasError('minlength')) {
+        <p class="text-xs text-red-500 mt-1">
+          Password must be at least 8 characters.
+        </p>
+        }
+
+        }
+
+      </div>
+
+
+      <!-- Confirm Password -->
+      <div class="mb-5">
+
+        <label for="confirmPassword" class="block text-xs font-medium
+                 text-[var(--primary-font-color)] mb-1">
+          Confirm Password
+        </label>
+
+        <input id="confirmPassword" type="password" formControlName="confirmPassword" autocomplete="new-password"
+          placeholder="Confirm your password" class="w-full px-3 py-2.5 text-sm rounded-lg
+                 bg-[var(--surface-color)]
+                 text-[var(--primary-font-color)]
+                 border border-[var(--border-color)]
+                 placeholder:text-[var(--secondary-font-color)]
+                 focus:outline-none focus:ring-2
+                 focus:ring-[var(--primary-color)]
+                 focus:border-[var(--primary-color)]" />
+
+        @if (registerForm.get('confirmPassword')?.touched) {
+
+        @if (
+        registerForm.get('confirmPassword')?.hasError('required')
+        ) {
+        <p class="text-xs text-red-500 mt-1">
+          Please confirm your password.
+        </p>
+        }
+
+        @if (
+        !registerForm.get('confirmPassword')?.hasError('required') &&
+        registerForm.hasError('passwordMismatch')
+        ) {
+        <p class="text-xs text-red-500 mt-1">
+          Passwords do not match.
+        </p>
+        }
+
+        }
+
+      </div>
+
+
+      <!-- Register Button -->
+      <button type="submit" [disabled]="isLoading" class="w-full bg-[var(--primary-color)]
+               text-white py-2.5 rounded-lg
+               text-sm font-semibold
+               hover:opacity-90
+               transition duration-200
+               disabled:opacity-60
+               disabled:cursor-not-allowed">
+
+        @if (isLoading) {
+        Creating Account...
+        } @else {
+        Create Account
+        }
+
+      </button>
+
+    </form>
+
+
+    <!-- Login -->
+    <div class="text-center mt-5">
+
+      <p class="text-xs text-[var(--secondary-font-color)]">
+        Already have an account?
+      </p>
+
+      <a routerLink="/login" class="inline-block mt-1
+               text-sm text-[var(--secondary-color)]
+               font-semibold
+               hover:opacity-80
+               cursor-pointer">
+        Login
+      </a>
+
+    </div>
+
+  </div>
+</div>
