@@ -145,20 +145,57 @@ export class ProfileSetup implements OnInit {
     if (theme === 'dark') {
       this.isDarkMode = true;
 
+      // Dark mode → white primary font
+      this.profileForm.patchValue(
+        {
+          primaryFontColor: '#FFFFFF',
+        },
+        {
+          emitEvent: false,
+        },
+      );
+
+      this.applyFormColors();
+
       return;
     }
 
     if (theme === 'light') {
       this.isDarkMode = false;
 
+      // Light mode → restore based on selected basic theme
+      const selectedTheme = this.profileForm.get('themeBasicProfile')?.value;
+
+      this.applyTheme(selectedTheme);
+
       return;
     }
 
     // SYSTEM SETTING
-    this.isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    this.isDarkMode = isDark;
+
+    if (isDark) {
+      // System is Dark
+      this.profileForm.patchValue(
+        {
+          primaryFontColor: '#FFFFFF',
+        },
+        {
+          emitEvent: false,
+        },
+      );
+
+      this.applyFormColors();
+    } else {
+      // System is Light
+      const selectedTheme = this.profileForm.get('themeBasicProfile')?.value;
+
+      this.applyTheme(selectedTheme);
+    }
   }
 
-  // MABABAGO ANG THEME NG ADVANCE SETTINGS BASE SA NAPILING THEME BASIC SETTINGS
   applyTheme(themeName: string): void {
     const theme = this.themes[themeName];
 
@@ -170,11 +207,17 @@ export class ProfileSetup implements OnInit {
       {
         primaryColor: theme.primaryColor,
         secondaryColor: theme.secondaryColor,
-        primaryFontColor: theme.primaryFontColor,
+
+        // Dark mode → white
+        // Light mode → theme default
+        primaryFontColor: this.isDarkMode ? '#FFFFFF' : theme.primaryFontColor,
+
         secondaryFontColor: theme.secondaryFontColor,
         accentColor: theme.accentColor,
       },
-      { emitEvent: false },
+      {
+        emitEvent: false,
+      },
     );
 
     this.applyFormColors();
