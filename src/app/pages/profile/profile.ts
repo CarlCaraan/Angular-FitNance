@@ -10,7 +10,7 @@ import { NutritionGoalsService } from '../../services/setup/nutrition-goals.serv
 import { ActivityLevel } from '../../models/setup/activity-level';
 import { NutritionGoals } from '../../models/setup/nutrition-goals';
 
-import { debounceTime, distinctUntilChanged, finalize } from 'rxjs';
+import { debounceTime, distinctUntilChanged, finalize, forkJoin, tap } from 'rxjs';
 
 import { ComputeProfileRequest } from '../../models/profile/compute-profile-request';
 import { ComputeProfileResponse } from '../../models/profile/compute-profile-response';
@@ -28,15 +28,13 @@ import { ConfirmDialog } from '../../components/dialogs/confirm-dialog/confirm-d
   styleUrl: './profile.css',
 })
 export class Profile implements OnInit {
-  profileForm!: FormGroup;
-
-  profile: UserProfile | null = null;
-
   activityLevels: ActivityLevel[] = [];
   nutritionGoals: NutritionGoals[] = [];
 
-  isSaving = false;
+  profileForm!: FormGroup;
 
+  profile: UserProfile | null = null;
+  isSaving = false;
   public showSaved = signal(false);
 
   constructor(
@@ -96,12 +94,34 @@ export class Profile implements OnInit {
 
   ngOnInit(): void {
     this.initializeForm();
-
     this.setupComputeTargets();
+    // this.loadActivityLevels();
+    // this.loadNutritionGoals();
 
-    this.loadProfile();
-    this.loadActivityLevels();
-    this.loadNutritionGoals();
+    forkJoin({
+      activityLevels: this.loadActivityLevels(),
+      nutritionGoals: this.loadNutritionGoals(),
+    }).subscribe(() => {
+      this.loadProfile();
+    });
+
+    // this.loadProfile();
+  }
+
+  loadActivityLevels() {
+    return this.activityLevelService.getActivityLevels().pipe(
+      tap((data) => {
+        this.activityLevels = data;
+      }),
+    );
+  }
+
+  loadNutritionGoals() {
+    return this.nutritionGoalsService.getNutritionGoals().pipe(
+      tap((data) => {
+        this.nutritionGoals = data;
+      }),
+    );
   }
 
   // =========================
@@ -248,29 +268,29 @@ export class Profile implements OnInit {
     return date.substring(0, 10);
   }
 
-  private loadActivityLevels(): void {
-    this.activityLevelService.getActivityLevels().subscribe({
-      next: (response) => {
-        this.activityLevels = response;
-      },
+  // private loadActivityLevels(): void {
+  //   this.activityLevelService.getActivityLevels().subscribe({
+  //     next: (response) => {
+  //       this.activityLevels = response;
+  //     },
 
-      error: (error) => {
-        console.error('Failed to load activity levels.', error);
-      },
-    });
-  }
+  //     error: (error) => {
+  //       console.error('Failed to load activity levels.', error);
+  //     },
+  //   });
+  // }
 
-  private loadNutritionGoals(): void {
-    this.nutritionGoalsService.getNutritionGoals().subscribe({
-      next: (response) => {
-        this.nutritionGoals = response;
-      },
+  // private loadNutritionGoals(): void {
+  //   this.nutritionGoalsService.getNutritionGoals().subscribe({
+  //     next: (response) => {
+  //       this.nutritionGoals = response;
+  //     },
 
-      error: (error) => {
-        console.error('Failed to load nutrition goals.', error);
-      },
-    });
-  }
+  //     error: (error) => {
+  //       console.error('Failed to load nutrition goals.', error);
+  //     },
+  //   });
+  // }
 
   // ==========================================
   // SETUP COMPUTE TARGETS
