@@ -70,9 +70,9 @@
 
     <!-- Food List -->
 
-    <a routerLink="/foodlist" routerLinkActive="bg-[var(--secondary-color)]"
-      outerLinkActive="bg-[var(--secondary-color)]" [routerLinkActiveOptions]="{ exact: true }"
-      class="flex items-center gap-3 px-3 py-3 rounded-lg transition" style="color: var(--primary-font-color);">
+    <a routerLink="/food" routerLinkActive="bg-[var(--secondary-color)]" outerLinkActive="bg-[var(--secondary-color)]"
+      [routerLinkActiveOptions]="{ exact: true }" class="flex items-center gap-3 px-3 py-3 rounded-lg transition"
+      style="color: var(--primary-font-color);">
       <span>🥑</span>
 
       @if (!isCollapsed) {
@@ -83,9 +83,9 @@
 
     <!-- Meal Plan -->
 
-    <a routerLink="/mealplan" routerLinkActive="bg-[var(--secondary-color)]"
-      outerLinkActive="bg-[var(--secondary-color)]" [routerLinkActiveOptions]="{ exact: true }"
-      class="flex items-center gap-3 px-3 py-3 rounded-lg transition" style="color: var(--primary-font-color);">
+    <a routerLink="/meal" routerLinkActive="bg-[var(--secondary-color)]" outerLinkActive="bg-[var(--secondary-color)]"
+      [routerLinkActiveOptions]="{ exact: true }" class="flex items-center gap-3 px-3 py-3 rounded-lg transition"
+      style="color: var(--primary-font-color);">
       <span>🍽️</span>
 
       @if (!isCollapsed) {
@@ -96,7 +96,7 @@
 
     <!-- Workout Plan -->
 
-    <a routerLink="/workoutplan" routerLinkActive="bg-[var(--secondary-color)]"
+    <a routerLink="/workout" routerLinkActive="bg-[var(--secondary-color)]"
       outerLinkActive="bg-[var(--secondary-color)]" [routerLinkActiveOptions]="{ exact: true }"
       class="flex items-center gap-3 px-3 py-3 rounded-lg transition" style="color: var(--primary-font-color);">
       <span>🏋️‍♂️</span>

@@ -7,6 +7,8 @@ import { Dashboard } from './pages/dashboard/dashboard';
 import { Profile } from './pages/profile/profile';
 import { Settings } from './pages/settings/settings';
 import { ProfileSetup } from './pages/profile-setup/profile-setup';
+import { Food } from './pages/food/food';
+import { Workout } from './pages/workout/workout';
 
 import { MainLayout } from './layouts/main-layout/main-layout';
 
@@ -47,6 +49,14 @@ export const routes: Routes = [
       {
         path: 'dashboard',
         component: Dashboard,
+      },
+      {
+        path: 'food',
+        component: Food,
+      },
+      {
+        path: 'workout',
+        component: Workout,
       },
       {
         path: 'profile',
