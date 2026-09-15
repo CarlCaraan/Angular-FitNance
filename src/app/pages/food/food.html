@@ -1,16 +1,396 @@
-<div class="min-h-screen p-4 bg-[var(--background-color)] text-[var(--primary-font-color)]">
+<div class="min-h-screen p-3 bg-[var(--background-color)] text-[var(--primary-font-color)]">
 
     <div class="max-w-full mx-auto">
 
-        <!-- Header -->
-        <div class="mb-4">
-            <h1 class="text-xl font-bold">
+        <!-- ========================= -->
+        <!-- HEADER -->
+        <!-- ========================= -->
+
+        <div class="mb-3">
+
+            <h1 class="text-lg font-bold">
                 Food List
             </h1>
 
             <p class="text-xs text-[var(--secondary-font-color)]">
                 View and manage available foods.
             </p>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- SEARCH -->
+        <!-- ========================= -->
+
+        <div class="mb-3">
+
+            <div class="relative">
+
+                <input type="text" [(ngModel)]="search" (keyup.enter)="onSearch()" placeholder="Search by food name"
+                    class="w-full px-3 py-1.5 pr-10 rounded-lg text-sm
+                   bg-[var(--surface-color)]
+                   text-[var(--primary-font-color)]
+                   border border-[var(--border-color)]
+                   placeholder:text-[var(--secondary-font-color)]
+                   focus:outline-none
+                   focus:ring-1
+                   focus:ring-[var(--primary-color)]
+                   focus:border-[var(--primary-color)]" />
+
+                @if (search) {
+
+                <button type="button" (click)="clearSearch()" class="absolute right-2 top-1/2 -translate-y-1/2
+                       text-[var(--secondary-font-color)]
+                       hover:text-[var(--primary-font-color)]">
+
+                    <mat-icon class="text-base">
+                        close
+                    </mat-icon>
+
+                </button>
+
+                }
+
+            </div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- FOOD LIST -->
+        <!-- ========================= -->
+
+        <div class="rounded-lg overflow-hidden
+           bg-[var(--surface-color)]
+           border border-[var(--border-color)]">
+
+            <!-- Loading -->
+
+            @if (isLoading) {
+
+            <div class="p-6 text-center">
+
+                <p class="text-xs text-[var(--secondary-font-color)]">
+                    Loading foods...
+                </p>
+
+            </div>
+
+            }
+
+            <!-- No Data -->
+
+            @else if (foods.length === 0) {
+
+            <div class="p-6 text-center">
+
+                <mat-icon class="text-[var(--secondary-font-color)]">
+                    restaurant
+                </mat-icon>
+
+                <p class="mt-1 text-xs text-[var(--secondary-font-color)]">
+                    No foods found.
+                </p>
+
+            </div>
+
+            }
+
+            <!-- Food Table -->
+
+            @else {
+
+            <div class="overflow-x-auto">
+
+                <table class="w-full text-xs">
+
+                    <!-- ========================= -->
+                    <!-- TABLE HEADER -->
+                    <!-- ========================= -->
+
+                    <thead class="bg-[var(--secondary-color)]
+                           text-[var(--primary-font-color)]">
+
+                        <tr class="text-left">
+
+                            <th class="px-3 py-2 font-semibold">
+                                Food
+                            </th>
+
+                            <th class="px-3 py-2 font-semibold">
+                                Category
+                            </th>
+
+                            <th class="px-3 py-2 font-semibold">
+                                Serving Size
+                            </th>
+
+                            <th class="px-3 py-2 font-semibold">
+                                Serving Unit
+                            </th>
+
+                            <th class="px-3 py-2 font-semibold">
+                                Serving Grams
+                            </th>
+
+                            <th class="px-3 py-2 font-semibold">
+                                Calories
+                            </th>
+
+                            <th class="px-3 py-2 font-semibold">
+                                Protein
+                            </th>
+
+                            <th class="px-3 py-2 font-semibold">
+                                Carbs
+                            </th>
+
+                            <th class="px-3 py-2 font-semibold">
+                                Fat
+                            </th>
+
+                            <th class="px-3 py-2 font-semibold">
+                                Fiber
+                            </th>
+
+                            <th class="px-3 py-2 font-semibold">
+                                Sodium
+                            </th>
+
+                            <th class="px-3 py-2 font-semibold">
+                                Sugar
+                            </th>
+
+                            <th class="px-3 py-2 font-semibold">
+                                Cholesterol
+                            </th>
+
+                            <th class="px-3 py-2 font-semibold">
+                                Canned
+                            </th>
+
+                            <th class="px-3 py-2 font-semibold">
+                                Fast Food
+                            </th>
+
+                            <th class="px-3 py-2 font-semibold">
+                                Created By
+                            </th>
+
+                            <th class="px-3 py-2 font-semibold">
+                                Created Date
+                            </th>
+
+                            <th class="px-3 py-2 font-semibold">
+                                Modified By
+                            </th>
+
+                            <th class="px-3 py-2 font-semibold">
+                                Modified Date
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <!-- ========================= -->
+                    <!-- TABLE BODY -->
+                    <!-- ========================= -->
+
+                    <tbody>
+
+                        @for (food of foods; track food.foodId) {
+
+                        <tr class="border-b border-[var(--border-color)]
+                           last:border-b-0
+                           hover:bg-black/5">
+
+                            <!-- Food -->
+
+                            <td class="px-3 py-2 font-medium whitespace-nowrap">
+                                {{ food.foodName }}
+                            </td>
+
+
+                            <!-- Category -->
+
+                            <td class="px-3 py-2 text-[var(--secondary-font-color)]">
+                                {{ food.category || '-' }}
+                            </td>
+
+
+                            <!-- Serving Size -->
+
+                            <td class="px-3 py-2 whitespace-nowrap">
+                                {{ food.servingSize ?? '-' }}
+                            </td>
+
+
+                            <!-- Serving Unit -->
+
+                            <td class="px-3 py-2 whitespace-nowrap">
+                                {{ food.servingUnit || '-' }}
+                            </td>
+
+
+                            <!-- Serving Grams -->
+
+                            <td class="px-3 py-2">
+                                {{ food.servingGrams ?? '-' }}
+                                @if (food.servingGrams != null) {
+                                g
+                                }
+                            </td>
+
+
+                            <!-- Calories -->
+
+                            <td class="px-3 py-2">
+                                {{ food.calories ?? '-' }}
+                                @if (food.calories != null) {
+                                kcal
+                                }
+                            </td>
+
+
+                            <!-- Protein -->
+
+                            <td class="px-3 py-2">
+                                {{ food.protein ?? '-' }}
+                                @if (food.protein != null) {
+                                g
+                                }
+                            </td>
+
+
+                            <!-- Carbs -->
+
+                            <td class="px-3 py-2">
+                                {{ food.carbs ?? '-' }}
+                                @if (food.carbs != null) {
+                                g
+                                }
+                            </td>
+
+
+                            <!-- Fat -->
+
+                            <td class="px-3 py-2">
+                                {{ food.fat ?? '-' }}
+                                @if (food.fat != null) {
+                                g
+                                }
+                            </td>
+
+
+                            <!-- Fiber -->
+
+                            <td class="px-3 py-2">
+                                {{ food.fiber ?? '-' }}
+                                @if (food.fiber != null) {
+                                g
+                                }
+                            </td>
+
+
+                            <!-- Sodium -->
+
+                            <td class="px-3 py-2">
+                                {{ food.sodium ?? '-' }}
+                                @if (food.sodium != null) {
+                                mg
+                                }
+                            </td>
+
+
+                            <!-- Sugar -->
+
+                            <td class="px-3 py-2">
+                                {{ food.sugar ?? '-' }}
+                                @if (food.sugar != null) {
+                                g
+                                }
+                            </td>
+
+
+                            <!-- Cholesterol -->
+
+                            <td class="px-3 py-2">
+                                {{ food.cholesterol ?? '-' }}
+                                @if (food.cholesterol != null) {
+                                mg
+                                }
+                            </td>
+
+
+                            <!-- Canned -->
+
+                            <td class="px-3 py-2">
+                                {{ food.isCanned === true ? 'Yes' : 'No' }}
+                            </td>
+
+
+                            <!-- Fast Food -->
+
+                            <td class="px-3 py-2">
+                                {{ food.isFastFood === true ? 'Yes' : 'No' }}
+                            </td>
+
+
+                            <!-- Created By -->
+
+                            <td class="px-3 py-2 whitespace-nowrap">
+                                {{ food.createdBy || '-' }}
+                            </td>
+
+
+                            <!-- Created Date -->
+
+                            <td class="px-3 py-2 whitespace-nowrap">
+                                {{ food.createdDate
+                                ? (food.createdDate | date:'short')
+                                : '-' }}
+                            </td>
+
+
+                            <!-- Modified By -->
+
+                            <td class="px-3 py-2 whitespace-nowrap">
+                                {{ food.modifiedBy || '-' }}
+                            </td>
+
+
+                            <!-- Modified Date -->
+
+                            <td class="px-3 py-2 whitespace-nowrap">
+                                {{ food.modifiedDate
+                                ? (food.modifiedDate | date:'short')
+                                : '-' }}
+                            </td>
+
+                        </tr>
+
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            }
+
+
+            <!-- ========================= -->
+            <!-- PAGINATOR -->
+            <!-- ========================= -->
+
+            <mat-paginator [length]="totalCount" [pageIndex]="pageNumber - 1" [pageSize]="pageSize"
+                [pageSizeOptions]="[10, 20, 30]" (page)="onPageChange($event)">
+            </mat-paginator>
+
         </div>
 
     </div>
