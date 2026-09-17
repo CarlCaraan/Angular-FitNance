@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PageEvent, MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -31,14 +31,16 @@ export class Food implements OnInit {
   // ==========================================
   // FOOD DATA
   // ==========================================
-  foods: MasterFood[] = [];
+  // foods: MasterFood[] = [];
+  foods = signal<MasterFood[]>([]);
 
   // ==========================================
   // PAGINATION
   // ==========================================
-  totalCount = 0;
-  pageNumber = 1;
-  pageSize = 30;
+  // totalCount = 0;
+  totalCount = signal(0);
+  pageNumber = signal(1);
+  pageSize = signal(10);
 
   // ==========================================
   // SEARCH
@@ -48,7 +50,8 @@ export class Food implements OnInit {
   // ==========================================
   // LOADING
   // ==========================================
-  isLoading = false;
+  // isLoading = false;
+  isLoading = signal(false);
 
   // ==========================================
   // INITIALIZE
@@ -61,23 +64,32 @@ export class Food implements OnInit {
   // LOAD FOODS
   // ==========================================
   loadFoods(): void {
-    this.isLoading = true;
+    console.log('LOAD FOODS:', this.pageNumber, this.pageSize);
 
-    this.foodService.getFoods(this.pageNumber, this.pageSize, this.search).subscribe({
+    this.isLoading.set(true);
+
+    this.foodService.getFoods(this.pageNumber(), this.pageSize(), this.search).subscribe({
       next: (response) => {
-        this.foods = response.items;
-        this.totalCount = response.totalCount;
+        console.log('RESPONSE:', response);
+        console.log('ITEMS:', response.items);
+        console.log('ITEM COUNT:', response.items?.length);
+        console.log('TOTAL COUNT:', response.totalCount);
 
-        this.isLoading = false;
+        this.foods.set(response.items ?? []);
+        this.totalCount.set(response.totalCount ?? 0);
+
+        console.log('FOODS AFTER ASSIGN:', this.foods());
+        console.log('FOODS LENGTH:', this.foods().length);
+
+        this.isLoading.set(false);
       },
 
       error: (error) => {
-        console.error('Error loading foods:', error);
+        console.error('ERROR:', error);
 
-        this.foods = [];
-        this.totalCount = 0;
-
-        this.isLoading = false;
+        this.foods.set([]);
+        this.totalCount.set(0);
+        this.isLoading.set(false);
       },
     });
   }
@@ -86,8 +98,8 @@ export class Food implements OnInit {
   // PAGINATOR
   // ==========================================
   onPageChange(event: PageEvent): void {
-    this.pageNumber = event.pageIndex + 1;
-    this.pageSize = event.pageSize;
+    this.pageNumber.set(event.pageIndex + 1);
+    this.pageSize.set(event.pageSize);
 
     this.loadFoods();
   }
@@ -97,7 +109,7 @@ export class Food implements OnInit {
   // ==========================================
   onSearch(): void {
     // Reset to first page when searching
-    this.pageNumber = 1;
+    this.pageNumber.set(1);
 
     this.loadFoods();
   }
@@ -107,7 +119,7 @@ export class Food implements OnInit {
   // ==========================================
   clearSearch(): void {
     this.search = '';
-    this.pageNumber = 1;
+    this.pageNumber.set(1);
 
     this.loadFoods();
   }

@@ -67,7 +67,7 @@
 
             <!-- Loading -->
 
-            @if (isLoading) {
+            @if (isLoading()) {
 
             <div class="p-6 text-center">
 
@@ -81,7 +81,7 @@
 
             <!-- No Data -->
 
-            @else if (foods.length === 0) {
+            @else if (foods().length === 0) {
 
             <div class="p-6 text-center">
 
@@ -201,7 +201,7 @@
 
                     <tbody>
 
-                        @for (food of foods; track food.foodId) {
+                        @for (food of foods(); track food.foodId) {
 
                         <tr class="border-b border-[var(--border-color)]
                            last:border-b-0
@@ -387,7 +387,7 @@
             <!-- PAGINATOR -->
             <!-- ========================= -->
 
-            <mat-paginator [length]="totalCount" [pageIndex]="pageNumber - 1" [pageSize]="pageSize"
+            <mat-paginator [length]="totalCount()" [pageIndex]="pageNumber() - 1" [pageSize]="pageSize()"
                 [pageSizeOptions]="[10, 20, 30]" (page)="onPageChange($event)">
             </mat-paginator>
 

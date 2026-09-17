@@ -26,3 +26,59 @@
   background-color: var(--surface-color) !important;
   color: var(--primary-font-color) !important;
 }
+
+table th,
+table td {
+  white-space: nowrap;
+  word-break: keep-all;
+}
+
+/* ==========================================
+   PAGINATOR THEME
+   ========================================== */
+
+.mat-mdc-paginator {
+  background-color: var(--surface-color) !important;
+  color: var(--primary-font-color) !important;
+  border-top: 1px solid var(--border-color);
+}
+
+.mat-mdc-paginator .mat-mdc-paginator-page-size-label,
+.mat-mdc-paginator .mat-mdc-paginator-range-label {
+  color: var(--secondary-font-color) !important;
+}
+
+.mat-mdc-paginator .mat-mdc-select-value-text {
+  color: var(--primary-font-color) !important;
+}
+
+.mat-mdc-paginator .mat-mdc-select-arrow {
+  color: var(--secondary-font-color) !important;
+}
+
+.mat-mdc-paginator .mat-mdc-text-field-wrapper {
+  background-color: var(--surface-color) !important;
+}
+
+.mat-mdc-paginator .mdc-notched-outline__leading,
+.mat-mdc-paginator .mdc-notched-outline__notch,
+.mat-mdc-paginator .mdc-notched-outline__trailing {
+  border-color: var(--border-color) !important;
+}
+
+.mat-mdc-paginator button {
+  color: var(--primary-font-color) !important;
+}
+
+.mat-mdc-paginator button.mat-mdc-button-disabled {
+  color: var(--secondary-font-color) !important;
+  opacity: 0.5;
+}
+
+.mat-mdc-paginator .mat-mdc-paginator-icon {
+  fill: var(--primary-color) !important;
+}
+
+.mat-mdc-paginator .mat-mdc-button-disabled .mat-mdc-paginator-icon {
+  opacity: 0.4;
+}
