@@ -6,15 +6,34 @@
         <!-- HEADER -->
         <!-- ========================= -->
 
-        <div class="mb-3">
+        <div class="mb-4 flex items-center justify-between gap-3">
 
-            <h1 class="text-lg font-bold">
-                Food List
-            </h1>
+            <!-- TITLE -->
+            <div>
+                <h1 class="text-lg font-bold text-[var(--primary-font-color)]">
+                    Food List
+                </h1>
 
-            <p class="text-xs text-[var(--secondary-font-color)]">
-                View and manage available foods.
-            </p>
+                <p class="text-xs text-[var(--secondary-font-color)]">
+                    View and manage available foods.
+                </p>
+            </div>
+
+            <!-- ACTIONS -->
+            <div class="flex items-center gap-2">
+
+                <!-- DELETE -->
+                <button matIconButton type="button" aria-label="Delete food" [disabled]="!selectedFood">
+                    <mat-icon>delete_outline</mat-icon>
+                </button>
+
+                <!-- ADD FOOD -->
+                <button matButton="elevated" type="button" (click)="addFood()">
+                    <mat-icon>add</mat-icon>
+                    Add Food
+                </button>
+
+            </div>
 
         </div>
 
@@ -109,7 +128,7 @@
                     <!-- TABLE HEADER -->
                     <!-- ========================= -->
 
-                    <thead class="bg-[var(--secondary-color)]
+                    <thead class="bg-[var(--accent-color)]
                            text-[var(--primary-font-color)]">
 
                         <tr class="text-left">

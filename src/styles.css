@@ -76,9 +76,34 @@ table td {
 }
 
 .mat-mdc-paginator .mat-mdc-paginator-icon {
-  fill: var(--primary-color) !important;
+  fill: var(--accent-color) !important;
 }
 
 .mat-mdc-paginator .mat-mdc-button-disabled .mat-mdc-paginator-icon {
   opacity: 0.4;
+}
+
+/* ==========================================
+/* Angular Material buttons */
+/* Icon buttons 
+   ========================================== */
+.mat-mdc-icon-button mat-icon {
+  color: var(--primary-color) !important;
+}
+
+.mat-mdc-raised-button {
+  --mdc-filled-button-container-color: var(--primary-color) !important;
+  --mdc-filled-button-label-text-color: var(--primary-font-color) !important;
+}
+
+.mat-mdc-raised-button mat-icon {
+  color: var(--primary-font-color) !important;
+}
+
+.mdc-button__label {
+  color: var(--primary-font-color) !important;
+}
+
+.mdc-button.mat-mdc-button-base {
+  background: var(--primary-color) !important;
 }

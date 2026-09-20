@@ -5,9 +5,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 import { FoodService } from '../../services/food/food.service';
 import { MasterFood } from '../../models/food/master-food';
+import { FoodDialog } from '../../components/dialogs/food-dialog/food-dialog';
 
 @Component({
   selector: 'app-food',
@@ -19,6 +22,8 @@ import { MasterFood } from '../../models/food/master-food';
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
+    MatButtonModule,
+    MatDialogModule,
   ],
   templateUrl: './food.html',
 })
@@ -27,12 +32,14 @@ export class Food implements OnInit {
   // SERVICES
   // ==========================================
   private readonly foodService = inject(FoodService);
+  private readonly dialog = inject(MatDialog);
 
   // ==========================================
   // FOOD DATA
   // ==========================================
   // foods: MasterFood[] = [];
   foods = signal<MasterFood[]>([]);
+  selectedFood: MasterFood | null = null;
 
   // ==========================================
   // PAGINATION
@@ -58,6 +65,13 @@ export class Food implements OnInit {
   // ==========================================
   ngOnInit(): void {
     this.loadFoods();
+  }
+
+  addFood(): void {
+    this.dialog.open(FoodDialog, {
+      width: '600px',
+      maxWidth: '95vw',
+    });
   }
 
   // ==========================================
