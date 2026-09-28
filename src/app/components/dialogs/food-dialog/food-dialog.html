@@ -33,8 +33,17 @@
                     Category
                 </label>
 
-                <input type="text" formControlName="category"
+                <select formControlName="category"
                     class="w-full rounded-md border border-[var(--border-color)] bg-[var(--surface-color)] px-3 py-2 text-sm text-[var(--primary-font-color)] outline-none focus:border-[var(--primary-color)] focus:ring-1 focus:ring-[var(--primary-color)]">
+
+                    <option value="">Select Category</option>
+
+                    @for (category of foodCategories; track category.categoryId) {
+                    <option [value]="category.categoryId">
+                        {{ category.categoryName }}
+                    </option>
+                    }
+                </select>
             </div>
 
             <!-- Serving Size -->
@@ -53,8 +62,17 @@
                     Serving Unit
                 </label>
 
-                <input type="text" formControlName="servingUnit"
+                <select formControlName="servingUnit"
                     class="w-full rounded-md border border-[var(--border-color)] bg-[var(--surface-color)] px-3 py-2 text-sm text-[var(--primary-font-color)] outline-none focus:border-[var(--primary-color)] focus:ring-1 focus:ring-[var(--primary-color)]">
+
+                    <option value="">Select Serving Unit</option>
+
+                    @for (unit of servingUnits; track unit.servingUnitId) {
+                    <option [value]="unit.servingUnitId">
+                        {{ unit.servingUnitName }}
+                    </option>
+                    }
+                </select>
             </div>
 
             <!-- Serving Grams -->

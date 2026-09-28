@@ -4,6 +4,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FoodService } from '../../../services/food/food.service';
 import { AddFoodRequest } from '../../../models/food/add-food-request';
+import { FoodCategories } from '../../../models/setup/food-categories';
+import { ServingUnits } from '../../../models/setup/serving-units';
+import { FoodCategoriesService } from '../../../services/setup/food-categories.service';
+import { ServingUnitsService } from '../../../services/setup/serving-units.service';
 
 @Component({
   selector: 'app-food-dialog',
@@ -13,9 +17,14 @@ import { AddFoodRequest } from '../../../models/food/add-food-request';
   styleUrl: './food-dialog.css',
 })
 export class FoodDialog {
+  foodCategories: FoodCategories[] = [];
+  servingUnits: ServingUnits[] = [];
+
   private readonly fb = inject(FormBuilder);
   private readonly foodService = inject(FoodService);
   private readonly dialogRef = inject(MatDialogRef<FoodDialog>);
+  private readonly foodCategoryService = inject(FoodCategoriesService);
+  private readonly servingUnitService = inject(ServingUnitsService);
 
   isSaving = false;
 
@@ -37,7 +46,39 @@ export class FoodDialog {
     isFastFood: [false],
   });
 
+  ngOnInit(): void {
+    this.loadFoodCategories();
+    this.loadServingUnits();
+  }
+
+  private loadFoodCategories(): void {
+    this.foodCategoryService.getFoodCategories().subscribe({
+      next: (data) => {
+        this.foodCategories = data;
+      },
+      error: (error) => {
+        console.error('Failed to load food categories:', error);
+      },
+    });
+  }
+
+  private loadServingUnits(): void {
+    this.servingUnitService.getServingUnits().subscribe({
+      next: (data) => {
+        this.servingUnits = data;
+      },
+      error: (error) => {
+        console.error('Failed to load serving units:', error);
+      },
+    });
+  }
+
   save(): void {
+    console.log(
+      'Food Name:',
+      this.foodForm.get('foodName')?.touched,
+      this.foodForm.get('foodName')?.dirty,
+    );
     if (this.foodForm.invalid) {
       this.foodForm.markAllAsTouched();
       return;
