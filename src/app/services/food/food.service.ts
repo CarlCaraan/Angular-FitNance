@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 import { FoodListResponse } from '../../models/food/food-list-response';
+import { AddFoodRequest } from '../../models/food/add-food-request';
 
 @Injectable({
   providedIn: 'root',
@@ -25,5 +26,9 @@ export class FoodService {
     }
 
     return this.http.get<FoodListResponse>(this.apiUrl, { params });
+  }
+
+  addFood(food: AddFoodRequest): Observable<any> {
+    return this.http.post(this.apiUrl, food);
   }
 }
