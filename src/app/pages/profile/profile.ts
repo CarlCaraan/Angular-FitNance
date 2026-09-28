@@ -1,5 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { ProfileService } from '../../services/profile/profile.service';
 import { UserProfile } from '../../models/profile/profile';
@@ -56,22 +56,22 @@ export class Profile implements OnInit {
       age: [{ value: '', disabled: true }],
       gender: [{ value: '', disabled: true }],
 
-      firstName: [''],
+      firstName: ['', Validators.required],
       middleName: [''],
-      lastName: [''],
+      lastName: ['', Validators.required],
 
       // ==========================================
       // BODY INFORMATION
       // ==========================================
 
-      height: [''],
-      weight: [''],
+      height: ['', Validators.required],
+      weight: ['', Validators.required],
 
       currentBMI: [{ value: '', disabled: true }],
 
       activityLevelId: [{ value: '', disabled: true }],
 
-      fitnessGoalId: [''],
+      fitnessGoalId: ['', Validators.required],
 
       // ==========================================
       // FINANCE
@@ -93,7 +93,6 @@ export class Profile implements OnInit {
   }
 
   ngOnInit(): void {
-    this.initializeForm();
     this.setupComputeTargets();
     // this.loadActivityLevels();
     // this.loadNutritionGoals();
@@ -122,60 +121,6 @@ export class Profile implements OnInit {
         this.nutritionGoals = data;
       }),
     );
-  }
-
-  // =========================
-  // INITIALIZE FORM
-  // =========================
-
-  private initializeForm(): void {
-    this.profileForm = this.fb.group({
-      // =========================
-      // NOT EDITABLE
-      // =========================
-
-      userProfileId: [{ value: '', disabled: true }],
-
-      birthdate: [{ value: '', disabled: true }],
-
-      age: [{ value: '', disabled: true }],
-
-      gender: [{ value: '', disabled: true }],
-
-      currentBMI: [{ value: '', disabled: true }],
-
-      activityLevelId: [{ value: '', disabled: true }],
-
-      targetCalories: [{ value: '', disabled: true }],
-
-      targetProtein: [{ value: '', disabled: true }],
-
-      targetCarbs: [{ value: '', disabled: true }],
-
-      targetFat: [{ value: '', disabled: true }],
-
-      // =========================
-      // EDITABLE
-      // =========================
-
-      height: [''],
-
-      weight: [''],
-
-      fitnessGoalId: [''],
-
-      monthlyIncome: [''],
-
-      savingsGoal: [''],
-
-      currentSavings: [''],
-
-      firstName: [''],
-
-      middleName: [''],
-
-      lastName: [''],
-    });
   }
 
   // =========================
@@ -436,11 +381,12 @@ export class Profile implements OnInit {
   // SAVE / UPDATE
   // =========================
 
-  // =========================
-  // SAVE / UPDATE
-  // =========================
-
   saveProfile(): void {
+    if (this.profileForm.invalid) {
+      this.profileForm.markAllAsTouched();
+      return;
+    }
+
     // Get raw form values.
     // getRawValue() para makuha pati disabled fields kung kailangan later.
     const formValue = this.profileForm.getRawValue();

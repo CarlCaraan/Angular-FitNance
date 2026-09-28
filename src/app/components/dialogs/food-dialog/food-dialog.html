@@ -15,6 +15,16 @@
 
                 <input type="text" formControlName="foodName"
                     class="w-full rounded-md border border-[var(--border-color)] bg-[var(--surface-color)] px-3 py-2 text-sm text-[var(--primary-font-color)] outline-none focus:border-[var(--primary-color)] focus:ring-1 focus:ring-[var(--primary-color)]">
+
+                <!-- Food Name Validation -->
+                @if (
+                foodForm.get('foodName')?.invalid &&
+                foodForm.get('foodName')?.touched
+                ) {
+                <p class="mt-1 text-xs text-red-500">
+                    Food name is required.
+                </p>
+                }
             </div>
 
             <!-- Category -->
