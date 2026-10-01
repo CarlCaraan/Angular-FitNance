@@ -26,3 +26,8 @@ jobs:
 
       - name: Build Angular
         run: npm run build
+        
+      - name: Test Angular
+        run: npm test -- --watch=false
+
+        
