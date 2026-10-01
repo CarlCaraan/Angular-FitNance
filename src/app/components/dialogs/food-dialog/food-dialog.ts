@@ -30,7 +30,7 @@ export class FoodDialog {
 
   foodForm = this.fb.nonNullable.group({
     foodName: ['', Validators.required],
-    category: [''],
+    category: ['', Validators.required],
     servingSize: [null as number | null],
     servingUnit: [''],
     servingGrams: [null as number | null],
