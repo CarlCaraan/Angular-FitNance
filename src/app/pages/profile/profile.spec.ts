@@ -2,8 +2,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Profile } from './profile';
 
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
+
+import { environment } from '../../../environments/environment';
 
 describe('Profile', () => {
   let component: Profile;
@@ -13,7 +14,6 @@ describe('Profile', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Profile],
-
       providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()],
     }).compileComponents();
 
@@ -23,14 +23,11 @@ describe('Profile', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
 
-    const activityRequest = httpMock.expectOne('https://localhost:7114/api/ActivityLevel');
-
+    const activityRequest = httpMock.expectOne(`${environment.apiUrl}/api/ActivityLevel`);
     activityRequest.flush([]);
 
-    const nutritionRequest = httpMock.expectOne('https://localhost:7114/api/NutritionGoals');
-
+    const nutritionRequest = httpMock.expectOne(`${environment.apiUrl}/api/NutritionGoals`);
     nutritionRequest.flush([]);
-
   });
 
   afterEach(() => {
