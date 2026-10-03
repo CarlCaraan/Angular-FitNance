@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 import { FoodListResponse } from '../../models/food/food-list-response';
@@ -14,12 +14,20 @@ export class FoodService {
 
   private readonly apiUrl = `${environment.apiUrl}/api/Food`;
 
+  // ==========================================
+  // GET FOODS
+  // ==========================================
+
   getFoods(
     pageNumber: number = 1,
     pageSize: number = 30,
     search: string = '',
+    source: string = 'all',
   ): Observable<FoodListResponse> {
-    let params = new HttpParams().set('pageNumber', pageNumber).set('pageSize', pageSize);
+    let params = new HttpParams()
+      .set('pageNumber', pageNumber)
+      .set('pageSize', pageSize)
+      .set('source', source);
 
     if (search.trim()) {
       params = params.set('search', search.trim());
@@ -28,7 +36,19 @@ export class FoodService {
     return this.http.get<FoodListResponse>(this.apiUrl, { params });
   }
 
+  // ==========================================
+  // ADD FOOD
+  // ==========================================
   addFood(food: AddFoodRequest): Observable<any> {
     return this.http.post(this.apiUrl, food);
+  }
+
+  // ==========================================
+  // DELETE FOOD
+  // ==========================================
+  deleteFood(foodIds: string[]): Observable<any> {
+    return this.http.delete(this.apiUrl, {
+      body: foodIds,
+    });
   }
 }

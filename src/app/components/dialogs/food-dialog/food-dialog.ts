@@ -8,11 +8,12 @@ import { FoodCategories } from '../../../models/setup/food-categories';
 import { ServingUnits } from '../../../models/setup/serving-units';
 import { FoodCategoriesService } from '../../../services/setup/food-categories.service';
 import { ServingUnitsService } from '../../../services/setup/serving-units.service';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-food-dialog',
   standalone: true,
-  imports: [MatDialogModule, MatButtonModule, ReactiveFormsModule],
+  imports: [MatDialogModule, MatButtonModule, ReactiveFormsModule, MatSnackBarModule],
   templateUrl: './food-dialog.html',
   styleUrl: './food-dialog.css',
 })
@@ -25,23 +26,24 @@ export class FoodDialog {
   private readonly dialogRef = inject(MatDialogRef<FoodDialog>);
   private readonly foodCategoryService = inject(FoodCategoriesService);
   private readonly servingUnitService = inject(ServingUnitsService);
+  private readonly snackBar = inject(MatSnackBar);
 
   isSaving = false;
 
   foodForm = this.fb.nonNullable.group({
     foodName: ['', Validators.required],
     category: ['', Validators.required],
-    servingSize: [null as number | null],
-    servingUnit: [''],
-    servingGrams: [null as number | null],
-    calories: [null as number | null],
-    protein: [null as number | null],
-    carbs: [null as number | null],
-    fat: [null as number | null],
-    fiber: [null as number | null],
-    sodium: [null as number | null],
-    sugar: [null as number | null],
-    cholesterol: [null as number | null],
+    servingSize: [null as number | null, Validators.required],
+    servingUnit: ['', Validators.required],
+    servingGrams: [null as number | null, Validators.required],
+    calories: [null as number | null, Validators.required],
+    protein: [null as number | null, Validators.required],
+    carbs: [null as number | null, Validators.required],
+    fat: [null as number | null, Validators.required],
+    fiber: [null as number | null, Validators.required],
+    sodium: [null as number | null, Validators.required],
+    sugar: [null as number | null, Validators.required],
+    cholesterol: [null as number | null, Validators.required],
     isCanned: [false],
     isFastFood: [false],
   });
@@ -51,6 +53,9 @@ export class FoodDialog {
     this.loadServingUnits();
   }
 
+  // ==========================================
+  // LOAD FOOD CATEGORIES
+  // ==========================================
   private loadFoodCategories(): void {
     this.foodCategoryService.getFoodCategories().subscribe({
       next: (data) => {
@@ -62,6 +67,9 @@ export class FoodDialog {
     });
   }
 
+  // ==========================================
+  // LOAD SERVING UNITS
+  // ==========================================
   private loadServingUnits(): void {
     this.servingUnitService.getServingUnits().subscribe({
       next: (data) => {
@@ -73,12 +81,13 @@ export class FoodDialog {
     });
   }
 
+  // ==========================================
+  // SAVE FOOD
+  // ==========================================
   save(): void {
-    console.log(
-      'Food Name:',
-      this.foodForm.get('foodName')?.touched,
-      this.foodForm.get('foodName')?.dirty,
-    );
+    // ==========================================
+    // VALIDATION
+    // ==========================================
     if (this.foodForm.invalid) {
       this.foodForm.markAllAsTouched();
       return;
@@ -86,15 +95,36 @@ export class FoodDialog {
 
     const food: AddFoodRequest = this.foodForm.getRawValue();
 
+    // ==========================================
+    // SAVING
+    // ==========================================
     this.isSaving = true;
 
     this.foodService.addFood(food).subscribe({
-      next: () => {
-        this.dialogRef.close(true);
+      next: (response) => {
+        this.isSaving = false;
+
+        console.log('ADD FOOD RESPONSE:', response);
+
+        // ==========================================
+        // CLOSE DIALOG
+        // ==========================================
+        this.dialogRef.close({
+          added: true,
+          foodId: response.foodId,
+        });
       },
+
       error: (error) => {
         console.error('Failed to add food:', error);
+
         this.isSaving = false;
+
+        this.snackBar.open('Failed to add food.', 'DISMISS', {
+          duration: 5000,
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+        });
       },
     });
   }

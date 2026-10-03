@@ -23,7 +23,8 @@
             <div class="flex items-center gap-2">
 
                 <!-- DELETE -->
-                <button matIconButton type="button" aria-label="Delete food" [disabled]="!selectedFood">
+                <button matIconButton type="button" aria-label="Delete food" [disabled]="selectedFoodIds.size === 0"
+                    (click)="deleteFood()">
                     <mat-icon>delete_outline</mat-icon>
                 </button>
 
@@ -39,23 +40,24 @@
 
 
         <!-- ========================= -->
-        <!-- SEARCH -->
+        <!-- SEARCH & FILTER -->
         <!-- ========================= -->
 
-        <div class="mb-3">
+        <div class="mb-3 flex flex-col md:flex-row gap-2">
 
-            <div class="relative">
+            <!-- SEARCH -->
+            <div class="relative flex-1">
 
                 <input type="text" [(ngModel)]="search" (keyup.enter)="onSearch()" placeholder="Search by food name"
                     class="w-full px-3 py-1.5 pr-10 rounded-lg text-sm
-                   bg-[var(--surface-color)]
-                   text-[var(--primary-font-color)]
-                   border border-[var(--border-color)]
-                   placeholder:text-[var(--secondary-font-color)]
-                   focus:outline-none
-                   focus:ring-1
-                   focus:ring-[var(--primary-color)]
-                   focus:border-[var(--primary-color)]" />
+                      bg-[var(--surface-color)]
+                      text-[var(--primary-font-color)]
+                      border border-[var(--border-color)]
+                      placeholder:text-[var(--secondary-font-color)]
+                      focus:outline-none
+                      focus:ring-1
+                      focus:ring-[var(--primary-color)]
+                      focus:border-[var(--primary-color)]" />
 
                 @if (search) {
 
@@ -73,6 +75,37 @@
 
             </div>
 
+            <!-- ========================= -->
+            <!-- FOOD SOURCE FILTER -->
+            <!-- ========================= -->
+
+            <div class="w-full md:w-48">
+
+                <select [ngModel]="foodSource()" (ngModelChange)="onFoodSourceChange($event)" class="w-full px-3 py-1.5 rounded-lg text-sm
+               bg-[var(--surface-color)]
+               text-[var(--primary-font-color)]
+               border border-[var(--border-color)]
+               focus:outline-none
+               focus:ring-1
+               focus:ring-[var(--primary-color)]
+               focus:border-[var(--primary-color)]">
+
+                    <option value="all">
+                        All Foods
+                    </option>
+
+                    <option value="system">
+                        System Default
+                    </option>
+
+                    <option value="user">
+                        My Foods
+                    </option>
+
+                </select>
+
+            </div>
+
         </div>
 
 
@@ -83,6 +116,15 @@
         <div class="rounded-lg overflow-hidden
            bg-[var(--surface-color)]
            border border-[var(--border-color)]">
+
+            <!-- ========================= -->
+            <!-- PAGINATOR -->
+            <!-- ========================= -->
+
+            <mat-paginator [length]="totalCount()" [pageIndex]="pageNumber() - 1" [pageSize]="pageSize()"
+                [pageSizeOptions]="[10, 20, 30]" (page)="onPageChange($event)">
+            </mat-paginator>
+
 
             <!-- Loading -->
 
@@ -117,7 +159,6 @@
             }
 
             <!-- Food Table -->
-
             @else {
 
             <div class="overflow-x-auto">
@@ -128,10 +169,17 @@
                     <!-- TABLE HEADER -->
                     <!-- ========================= -->
 
-                    <thead class="bg-[var(--accent-color)]
-                           text-[var(--primary-font-color)]">
+
+
+                    <thead class="bg-[var(--accent-color)] text-[var(--primary-font-color)]">
 
                         <tr class="text-left">
+
+                            <!-- Select All -->
+                            <th class="px-3 py-2 font-semibold">
+                                <input type="checkbox" [checked]="isAllSelected()" [indeterminate]="isSomeSelected()"
+                                    (change)="toggleAll($event)" class="h-4 w-4 cursor-pointer" />
+                            </th>
 
                             <th class="px-3 py-2 font-semibold">
                                 Food
@@ -213,180 +261,119 @@
 
                     </thead>
 
-
                     <!-- ========================= -->
                     <!-- TABLE BODY -->
                     <!-- ========================= -->
-
                     <tbody>
-
                         @for (food of foods(); track food.foodId) {
 
-                        <tr class="border-b border-[var(--border-color)]
-                           last:border-b-0
-                           hover:bg-black/5">
+                        <tr class="border-b border-[var(--border-color)] hover:bg-[var(--background-color)]">
+
+                            <!-- Checkbox -->
+                            <td class="px-3 py-2">
+
+                                <input type="checkbox" [disabled]="food.userId === 'D'"
+                                    [checked]="selectedFoodIds.has(food.foodId)"
+                                    (change)="toggleFoodSelection(food.foodId, $event)"
+                                    class="h-4 w-4 cursor-pointer disabled:cursor-not-allowed" />
+
+                            </td>
 
                             <!-- Food -->
-
-                            <td class="px-3 py-2 font-medium whitespace-nowrap">
+                            <!-- Food -->
+                            <td class="px-3 py-2" [class.text-[var(--primary-color)]]="food.userId !== 'D'"
+                                [class.font-semibold]="food.userId !== 'D'">
                                 {{ food.foodName }}
                             </td>
 
-
                             <!-- Category -->
-
-                            <td class="px-3 py-2 text-[var(--secondary-font-color)]">
-                                {{ food.category || '-' }}
+                            <td class="px-3 py-2">
+                                {{ food.category }}
                             </td>
-
 
                             <!-- Serving Size -->
-
-                            <td class="px-3 py-2 whitespace-nowrap">
-                                {{ food.servingSize ?? '-' }}
+                            <td class="px-3 py-2">
+                                {{ food.servingSize }}
                             </td>
-
 
                             <!-- Serving Unit -->
-
-                            <td class="px-3 py-2 whitespace-nowrap">
-                                {{ food.servingUnit || '-' }}
+                            <td class="px-3 py-2">
+                                {{ food.servingUnit }}
                             </td>
-
 
                             <!-- Serving Grams -->
-
                             <td class="px-3 py-2">
-                                {{ food.servingGrams ?? '-' }}
-                                @if (food.servingGrams != null) {
-                                g
-                                }
+                                {{ food.servingGrams }}
                             </td>
-
 
                             <!-- Calories -->
-
                             <td class="px-3 py-2">
-                                {{ food.calories ?? '-' }}
-                                @if (food.calories != null) {
-                                kcal
-                                }
+                                {{ food.calories }}
                             </td>
-
 
                             <!-- Protein -->
-
                             <td class="px-3 py-2">
-                                {{ food.protein ?? '-' }}
-                                @if (food.protein != null) {
-                                g
-                                }
+                                {{ food.protein }}
                             </td>
-
 
                             <!-- Carbs -->
-
                             <td class="px-3 py-2">
-                                {{ food.carbs ?? '-' }}
-                                @if (food.carbs != null) {
-                                g
-                                }
+                                {{ food.carbs }}
                             </td>
-
 
                             <!-- Fat -->
-
                             <td class="px-3 py-2">
-                                {{ food.fat ?? '-' }}
-                                @if (food.fat != null) {
-                                g
-                                }
+                                {{ food.fat }}
                             </td>
-
 
                             <!-- Fiber -->
-
                             <td class="px-3 py-2">
-                                {{ food.fiber ?? '-' }}
-                                @if (food.fiber != null) {
-                                g
-                                }
+                                {{ food.fiber }}
                             </td>
-
 
                             <!-- Sodium -->
-
                             <td class="px-3 py-2">
-                                {{ food.sodium ?? '-' }}
-                                @if (food.sodium != null) {
-                                mg
-                                }
+                                {{ food.sodium }}
                             </td>
-
 
                             <!-- Sugar -->
-
                             <td class="px-3 py-2">
-                                {{ food.sugar ?? '-' }}
-                                @if (food.sugar != null) {
-                                g
-                                }
+                                {{ food.sugar }}
                             </td>
-
 
                             <!-- Cholesterol -->
-
                             <td class="px-3 py-2">
-                                {{ food.cholesterol ?? '-' }}
-                                @if (food.cholesterol != null) {
-                                mg
-                                }
+                                {{ food.cholesterol }}
                             </td>
-
 
                             <!-- Canned -->
-
                             <td class="px-3 py-2">
-                                {{ food.isCanned === true ? 'Yes' : 'No' }}
+                                {{ food.isCanned ? 'Yes' : 'No' }}
                             </td>
-
 
                             <!-- Fast Food -->
-
                             <td class="px-3 py-2">
-                                {{ food.isFastFood === true ? 'Yes' : 'No' }}
+                                {{ food.isFastFood ? 'Yes' : 'No' }}
                             </td>
-
 
                             <!-- Created By -->
-
-                            <td class="px-3 py-2 whitespace-nowrap">
-                                {{ food.createdBy || '-' }}
+                            <td class="px-3 py-2">
+                                {{ food.createdBy }}
                             </td>
-
 
                             <!-- Created Date -->
-
-                            <td class="px-3 py-2 whitespace-nowrap">
-                                {{ food.createdDate
-                                ? (food.createdDate | date:'short')
-                                : '-' }}
+                            <td class="px-3 py-2">
+                                {{ food.createdDate | date:'MM/dd/yyyy' }}
                             </td>
 
-
                             <!-- Modified By -->
-
-                            <td class="px-3 py-2 whitespace-nowrap">
+                            <td class="px-3 py-2">
                                 {{ food.modifiedBy || '-' }}
                             </td>
 
-
                             <!-- Modified Date -->
-
-                            <td class="px-3 py-2 whitespace-nowrap">
-                                {{ food.modifiedDate
-                                ? (food.modifiedDate | date:'short')
-                                : '-' }}
+                            <td class="px-3 py-2">
+                                {{ food.modifiedDate ? (food.modifiedDate | date:'MM/dd/yyyy') : '-' }}
                             </td>
 
                         </tr>
@@ -399,16 +386,14 @@
 
             </div>
 
+
+
+
+
             }
 
 
-            <!-- ========================= -->
-            <!-- PAGINATOR -->
-            <!-- ========================= -->
 
-            <mat-paginator [length]="totalCount()" [pageIndex]="pageNumber() - 1" [pageSize]="pageSize()"
-                [pageSizeOptions]="[10, 20, 30]" (page)="onPageChange($event)">
-            </mat-paginator>
 
         </div>
 

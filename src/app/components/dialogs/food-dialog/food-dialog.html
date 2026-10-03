@@ -8,7 +8,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
 
             <!-- Food Name -->
-            <div class="md:col-span-2">
+            <div>
                 <label class="block mb-1 text-xs font-medium text-[var(--primary-font-color)]">
                     Food Name
                 </label>
@@ -16,11 +16,7 @@
                 <input type="text" formControlName="foodName"
                     class="w-full rounded-md border border-[var(--border-color)] bg-[var(--surface-color)] px-3 py-2 text-sm text-[var(--primary-font-color)] outline-none focus:border-[var(--primary-color)] focus:ring-1 focus:ring-[var(--primary-color)]">
 
-                <!-- Food Name Validation -->
-                @if (
-                foodForm.get('foodName')?.invalid &&
-                foodForm.get('foodName')?.touched
-                ) {
+                @if (foodForm.get('foodName')?.invalid && foodForm.get('foodName')?.touched) {
                 <p class="mt-1 text-xs text-red-500">
                     Food name is required.
                 </p>
@@ -39,40 +35,63 @@
                     <option value="">Select Category</option>
 
                     @for (category of foodCategories; track category.categoryId) {
-                    <option [value]="category.categoryId">
+                    <option [value]="category.categoryName">
                         {{ category.categoryName }}
                     </option>
                     }
+
                 </select>
+
+                @if (foodForm.get('category')?.invalid && foodForm.get('category')?.touched) {
+                <p class="mt-1 text-xs text-red-500">
+                    Category is required.
+                </p>
+                }
             </div>
 
-            <!-- Serving Size -->
-            <div>
+            <!-- Serving -->
+            <div class="md:col-span-2">
                 <label class="block mb-1 text-xs font-medium text-[var(--primary-font-color)]">
-                    Serving Size
+                    Serving
                 </label>
 
-                <input type="number" formControlName="servingSize"
-                    class="w-full rounded-md border border-[var(--border-color)] bg-[var(--surface-color)] px-3 py-2 text-sm text-[var(--primary-font-color)] outline-none focus:border-[var(--primary-color)] focus:ring-1 focus:ring-[var(--primary-color)]">
-            </div>
+                <div class="grid grid-cols-2 gap-2">
 
-            <!-- Serving Unit -->
-            <div>
-                <label class="block mb-1 text-xs font-medium text-[var(--primary-font-color)]">
-                    Serving Unit
-                </label>
+                    <!-- Serving Size -->
+                    <div>
+                        <input type="number" formControlName="servingSize" placeholder="Size"
+                            class="w-full rounded-md border border-[var(--border-color)] bg-[var(--surface-color)] px-3 py-2 text-sm text-[var(--primary-font-color)] outline-none focus:border-[var(--primary-color)] focus:ring-1 focus:ring-[var(--primary-color)]">
 
-                <select formControlName="servingUnit"
-                    class="w-full rounded-md border border-[var(--border-color)] bg-[var(--surface-color)] px-3 py-2 text-sm text-[var(--primary-font-color)] outline-none focus:border-[var(--primary-color)] focus:ring-1 focus:ring-[var(--primary-color)]">
+                        @if (foodForm.get('servingSize')?.invalid && foodForm.get('servingSize')?.touched) {
+                        <p class="mt-1 text-xs text-red-500">
+                            Serving size is required.
+                        </p>
+                        }
+                    </div>
 
-                    <option value="">Select Serving Unit</option>
+                    <!-- Serving Unit -->
+                    <div>
+                        <select formControlName="servingUnit"
+                            class="w-full rounded-md border border-[var(--border-color)] bg-[var(--surface-color)] px-3 py-2 text-sm text-[var(--primary-font-color)] outline-none focus:border-[var(--primary-color)] focus:ring-1 focus:ring-[var(--primary-color)]">
 
-                    @for (unit of servingUnits; track unit.servingUnitId) {
-                    <option [value]="unit.servingUnitId">
-                        {{ unit.servingUnitName }}
-                    </option>
-                    }
-                </select>
+                            <option value="">Select Unit</option>
+
+                            @for (unit of servingUnits; track unit.servingUnitId) {
+                            <option [value]="unit.servingUnitName">
+                                {{ unit.servingUnitName }}
+                            </option>
+                            }
+
+                        </select>
+
+                        @if (foodForm.get('servingUnit')?.invalid && foodForm.get('servingUnit')?.touched) {
+                        <p class="mt-1 text-xs text-red-500">
+                            Serving unit is required.
+                        </p>
+                        }
+                    </div>
+
+                </div>
             </div>
 
             <!-- Serving Grams -->
@@ -81,8 +100,14 @@
                     Serving Grams
                 </label>
 
-                <input type="number" formControlName="servingGrams"
+                <input type="number" formControlName="servingGrams" placeholder="e.g. 240"
                     class="w-full rounded-md border border-[var(--border-color)] bg-[var(--surface-color)] px-3 py-2 text-sm text-[var(--primary-font-color)] outline-none focus:border-[var(--primary-color)] focus:ring-1 focus:ring-[var(--primary-color)]">
+
+                @if (foodForm.get('servingGrams')?.invalid && foodForm.get('servingGrams')?.touched) {
+                <p class="mt-1 text-xs text-red-500">
+                    Serving grams is required.
+                </p>
+                }
             </div>
 
             <!-- Calories -->
@@ -93,6 +118,12 @@
 
                 <input type="number" formControlName="calories"
                     class="w-full rounded-md border border-[var(--border-color)] bg-[var(--surface-color)] px-3 py-2 text-sm text-[var(--primary-font-color)] outline-none focus:border-[var(--primary-color)] focus:ring-1 focus:ring-[var(--primary-color)]">
+
+                @if (foodForm.get('calories')?.invalid && foodForm.get('calories')?.touched) {
+                <p class="mt-1 text-xs text-red-500">
+                    Calories is required.
+                </p>
+                }
             </div>
 
             <!-- Protein -->
@@ -103,6 +134,12 @@
 
                 <input type="number" formControlName="protein"
                     class="w-full rounded-md border border-[var(--border-color)] bg-[var(--surface-color)] px-3 py-2 text-sm text-[var(--primary-font-color)] outline-none focus:border-[var(--primary-color)] focus:ring-1 focus:ring-[var(--primary-color)]">
+
+                @if (foodForm.get('protein')?.invalid && foodForm.get('protein')?.touched) {
+                <p class="mt-1 text-xs text-red-500">
+                    Protein is required.
+                </p>
+                }
             </div>
 
             <!-- Carbs -->
@@ -113,6 +150,12 @@
 
                 <input type="number" formControlName="carbs"
                     class="w-full rounded-md border border-[var(--border-color)] bg-[var(--surface-color)] px-3 py-2 text-sm text-[var(--primary-font-color)] outline-none focus:border-[var(--primary-color)] focus:ring-1 focus:ring-[var(--primary-color)]">
+
+                @if (foodForm.get('carbs')?.invalid && foodForm.get('carbs')?.touched) {
+                <p class="mt-1 text-xs text-red-500">
+                    Carbs is required.
+                </p>
+                }
             </div>
 
             <!-- Fat -->
@@ -123,6 +166,12 @@
 
                 <input type="number" formControlName="fat"
                     class="w-full rounded-md border border-[var(--border-color)] bg-[var(--surface-color)] px-3 py-2 text-sm text-[var(--primary-font-color)] outline-none focus:border-[var(--primary-color)] focus:ring-1 focus:ring-[var(--primary-color)]">
+
+                @if (foodForm.get('fat')?.invalid && foodForm.get('fat')?.touched) {
+                <p class="mt-1 text-xs text-red-500">
+                    Fat is required.
+                </p>
+                }
             </div>
 
             <!-- Fiber -->
@@ -133,6 +182,12 @@
 
                 <input type="number" formControlName="fiber"
                     class="w-full rounded-md border border-[var(--border-color)] bg-[var(--surface-color)] px-3 py-2 text-sm text-[var(--primary-font-color)] outline-none focus:border-[var(--primary-color)] focus:ring-1 focus:ring-[var(--primary-color)]">
+
+                @if (foodForm.get('fiber')?.invalid && foodForm.get('fiber')?.touched) {
+                <p class="mt-1 text-xs text-red-500">
+                    Fiber is required.
+                </p>
+                }
             </div>
 
             <!-- Sodium -->
@@ -143,6 +198,12 @@
 
                 <input type="number" formControlName="sodium"
                     class="w-full rounded-md border border-[var(--border-color)] bg-[var(--surface-color)] px-3 py-2 text-sm text-[var(--primary-font-color)] outline-none focus:border-[var(--primary-color)] focus:ring-1 focus:ring-[var(--primary-color)]">
+
+                @if (foodForm.get('sodium')?.invalid && foodForm.get('sodium')?.touched) {
+                <p class="mt-1 text-xs text-red-500">
+                    Sodium is required.
+                </p>
+                }
             </div>
 
             <!-- Sugar -->
@@ -153,6 +214,12 @@
 
                 <input type="number" formControlName="sugar"
                     class="w-full rounded-md border border-[var(--border-color)] bg-[var(--surface-color)] px-3 py-2 text-sm text-[var(--primary-font-color)] outline-none focus:border-[var(--primary-color)] focus:ring-1 focus:ring-[var(--primary-color)]">
+
+                @if (foodForm.get('sugar')?.invalid && foodForm.get('sugar')?.touched) {
+                <p class="mt-1 text-xs text-red-500">
+                    Sugar is required.
+                </p>
+                }
             </div>
 
             <!-- Cholesterol -->
@@ -163,19 +230,32 @@
 
                 <input type="number" formControlName="cholesterol"
                     class="w-full rounded-md border border-[var(--border-color)] bg-[var(--surface-color)] px-3 py-2 text-sm text-[var(--primary-font-color)] outline-none focus:border-[var(--primary-color)] focus:ring-1 focus:ring-[var(--primary-color)]">
+
+                @if (foodForm.get('cholesterol')?.invalid && foodForm.get('cholesterol')?.touched) {
+                <p class="mt-1 text-xs text-red-500">
+                    Cholesterol is required.
+                </p>
+                }
             </div>
 
-            <!-- Is Canned -->
-            <label class="flex items-center gap-2 cursor-pointer text-[var(--primary-font-color)]">
-                <input type="checkbox" formControlName="isCanned" class="accent-[var(--primary-color)]">
-                <span>Is Canned</span>
-            </label>
+            <!-- Food Type -->
+            <div class="md:col-span-2">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
 
-            <!-- Is Fast Food -->
-            <label class="flex items-center gap-2 cursor-pointer text-[var(--primary-font-color)]">
-                <input type="checkbox" formControlName="isFastFood" class="accent-[var(--primary-color)]">
-                <span>Is Fast Food</span>
-            </label>
+                    <!-- Is Canned -->
+                    <label class="flex items-center gap-3 cursor-pointer text-[var(--primary-font-color)]">
+                        <input type="checkbox" formControlName="isCanned" class="accent-[var(--primary-color)]">
+                        <span>Is Canned</span>
+                    </label>
+
+                    <!-- Is Fast Food -->
+                    <label class="flex items-center gap-3 cursor-pointer text-[var(--primary-font-color)]">
+                        <input type="checkbox" formControlName="isFastFood" class="accent-[var(--primary-color)]">
+                        <span>Is Fast Food</span>
+                    </label>
+
+                </div>
+            </div>
 
         </div>
 
