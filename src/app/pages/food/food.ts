@@ -318,7 +318,7 @@ export class Food implements OnInit {
 
           this.loadFoods();
 
-          this.snackBar.open('Food deleted successfully.', 'UNDO', {
+          this.snackBar.open('Food deleted successfully.', '', {
             duration: 5000,
             horizontalPosition: 'center',
             verticalPosition: 'bottom',
@@ -329,7 +329,7 @@ export class Food implements OnInit {
 
           this.isLoading.set(false);
 
-          this.snackBar.open('Food deleted successfully.', 'UNDO', {
+          this.snackBar.open('Error deleting food', '', {
             duration: 5000,
             horizontalPosition: 'center',
             verticalPosition: 'bottom',
