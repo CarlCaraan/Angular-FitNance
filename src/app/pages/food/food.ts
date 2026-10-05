@@ -97,6 +97,9 @@ export class Food implements OnInit {
     const dialogRef = this.dialog.open(FoodDialog, {
       width: '600px',
       maxWidth: '95vw',
+      data: {
+        mode: 'add',
+      },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -137,6 +140,37 @@ export class Food implements OnInit {
             },
           });
         });
+    });
+  }
+
+  // ==========================================
+  // EDIT FOOD
+  // ==========================================
+  editFood(food: any): void {
+    const dialogRef = this.dialog.open(FoodDialog, {
+      width: '600px',
+      data: {
+        mode: 'edit',
+        food: food,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.updated) {
+        // ==========================================
+        // RELOAD FOOD LIST
+        // ==========================================
+        this.loadFoods();
+
+        // ==========================================
+        // SUCCESS SNACKBAR
+        // ==========================================
+        this.snackBar.open('Food updated successfully.', '', {
+          duration: 5000,
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+        });
+      }
     });
   }
 

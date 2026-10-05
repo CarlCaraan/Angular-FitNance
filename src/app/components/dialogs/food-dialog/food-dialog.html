@@ -1,5 +1,5 @@
 <h2 mat-dialog-title class="!text-lg !font-bold !text-[var(--primary-color)]">
-    Add Food
+    {{ data.mode === 'edit' ? 'Edit Food' : 'Add Food' }}
 </h2>
 
 <mat-dialog-content class="text-sm !text-[var(--primary-font-color)]">
@@ -270,7 +270,12 @@
 
     <button matButton="elevated" type="button" class="!bg-[var(--primary-color)] !text-[var(--primary-font-color)]"
         [disabled]="isSaving" (click)="save()">
-        {{ isSaving ? 'Saving...' : 'Save' }}
+
+        {{ isSaving
+        ? (data.mode === 'edit' ? 'Updating...' : 'Saving...')
+        : (data.mode === 'edit' ? 'Update' : 'Save')
+        }}
+
     </button>
 
 </mat-dialog-actions>

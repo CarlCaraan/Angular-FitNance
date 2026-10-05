@@ -267,7 +267,9 @@
                     <tbody>
                         @for (food of foods(); track food.foodId) {
 
-                        <tr class="border-b border-[var(--border-color)] hover:bg-[var(--background-color)]">
+                        <tr (dblclick)="food.userId !== 'D' && editFood(food)"
+                            [class.cursor-pointer]="food.userId !== 'D'" class="cursor-pointer"
+                            class="border-b border-[var(--border-color)] hover:bg-[var(--background-color)]">
 
                             <!-- Checkbox -->
                             <td class="px-3 py-2">

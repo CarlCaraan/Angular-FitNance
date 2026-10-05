@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { forkJoin, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 import { FoodListResponse } from '../../models/food/food-list-response';
@@ -39,13 +39,23 @@ export class FoodService {
   // ==========================================
   // ADD FOOD
   // ==========================================
+
   addFood(food: AddFoodRequest): Observable<any> {
     return this.http.post(this.apiUrl, food);
   }
 
   // ==========================================
+  // UPDATE FOOD
+  // ==========================================
+
+  updateFood(foodId: number, food: AddFoodRequest): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${foodId}`, food);
+  }
+
+  // ==========================================
   // DELETE FOOD
   // ==========================================
+
   deleteFood(foodIds: string[]): Observable<any> {
     return this.http.delete(this.apiUrl, {
       body: foodIds,
