@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FoodDialog } from './food-dialog';
 
 describe('FoodDialog', () => {
@@ -37,6 +37,19 @@ describe('FoodDialog', () => {
       providers: [
         provideHttpClient(),
 
+        // ==========================================
+        // MOCK DIALOG DATA
+        // ==========================================
+        {
+          provide: MAT_DIALOG_DATA,
+          useValue: {
+            mode: 'add',
+          },
+        },
+
+        // ==========================================
+        // MOCK DIALOG REF
+        // ==========================================
         {
           provide: MatDialogRef,
           useValue: {
