@@ -14,6 +14,7 @@ import { FoodDialog } from '../../components/dialogs/food-dialog/food-dialog';
 import { ConfirmDialog } from '../../components/dialogs/confirm-dialog/confirm-dialog';
 import { forkJoin } from 'rxjs';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { LoadingService } from '../../services/loading/loading.service';
 
 @Component({
   selector: 'app-food',
@@ -38,6 +39,7 @@ export class Food implements OnInit {
   private readonly foodService = inject(FoodService);
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly loadingService = inject(LoadingService);
 
   // ==========================================
   // FOOD DATA
@@ -126,6 +128,7 @@ export class Food implements OnInit {
           // ==========================================
           // DELETE RECENTLY ADDED FOOD
           // ==========================================
+          this.loadingService.start();
           this.foodService.deleteFood([result.foodId]).subscribe({
             next: () => {
               console.log('Undo successful. Food deleted:', result.foodId);
@@ -137,6 +140,7 @@ export class Food implements OnInit {
             },
             error: (error) => {
               console.error('Undo delete failed:', error);
+              this.loadingService.stop();
             },
           });
         });
@@ -178,6 +182,7 @@ export class Food implements OnInit {
   // LOAD FOODS
   // ==========================================
   loadFoods(): void {
+    this.loadingService.start();
     console.log('LOAD FOODS:', this.pageNumber, this.pageSize);
 
     this.isLoading.set(true);
@@ -198,6 +203,7 @@ export class Food implements OnInit {
           console.log('FOODS LENGTH:', this.foods().length);
 
           this.isLoading.set(false);
+          this.loadingService.stop();
         },
 
         error: (error) => {
@@ -206,6 +212,7 @@ export class Food implements OnInit {
           this.foods.set([]);
           this.totalCount.set(0);
           this.isLoading.set(false);
+          this.loadingService.stop();
         },
       });
   }
@@ -334,6 +341,7 @@ export class Food implements OnInit {
       // ==========================================
       // LOADING
       // ==========================================
+      this.loadingService.start();
       this.isLoading.set(true);
 
       const foodIds = selectedFoods.map((food) => food.foodId);
@@ -360,6 +368,7 @@ export class Food implements OnInit {
         },
         error: (error) => {
           console.error('Error deleting food:', error);
+          this.loadingService.stop();
 
           this.isLoading.set(false);
 
