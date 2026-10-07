@@ -1,4 +1,4 @@
-@if (isLoading) {
+@if (isLoading()) {
 <div class="fixed top-0 left-0 w-full z-50">
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 </div>
@@ -139,7 +139,7 @@
 
 
             <!-- Login Button -->
-            <button type="submit" [disabled]="isLoading" class="w-full bg-[var(--primary-color)]
+            <button type="submit" [disabled]="isLoading()" class="w-full bg-[var(--primary-color)]
                text-white py-3 rounded-lg
                font-semibold
                hover:opacity-90
@@ -147,7 +147,7 @@
                disabled:opacity-60
                disabled:cursor-not-allowed">
 
-                @if (isLoading) {
+                @if (isLoading()) {
                 Logging in...
                 } @else {
                 Login

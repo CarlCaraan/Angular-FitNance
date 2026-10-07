@@ -19,7 +19,7 @@ export class Login {
   // Dito natin ilalagay ang login form.
   loginForm: FormGroup;
   errorMessage = signal('');
-  isLoading: boolean = false;
+  isLoading = signal(false);
   hide = signal(true);
   public loginSuccessMessage = signal('');
 
@@ -65,71 +65,48 @@ export class Login {
   // LOGIN
   // ==========================================
   onSubmit(): void {
-    // Check muna kung valid ang form.
+    // console.log('🔥 onSubmit START');
+    // console.log('isLoading BEFORE:', this.isLoading());
+
     if (this.loginForm.invalid) {
-      // Ipapakita ang validation errors
-      // kung may required field na hindi filled-up.
       this.loginForm.markAllAsTouched();
-
-      // Clear previous API error
       this.errorMessage.set('');
-
       return;
     }
 
-    // Kunin ang values ng form.
-    //
-    // Example:
-    // {
-    //   username: "womoves123",
-    //   password: "********"
-    // }
     const request: LoginRequest = this.loginForm.value;
 
-    this.isLoading = true;
+    this.isLoading.set(true);
 
-    // Tawagin ang Login API
+    // console.log('🔥 isLoading SET TO:', this.isLoading());
+
     this.loginService.login(request).subscribe({
       // ==========================================
       // SUCCESS
       // ==========================================
       next: (response) => {
-        this.isLoading = false;
-        console.log('Login successful!');
-        console.log('Username:', response.username);
-        console.log('Is Profile Complete:', response.isProfileComplete);
+        // console.log('✅ SUCCESS');
 
-        // I-save ang JWT token sa localStorage.
-        //
-        // Pagkatapos nito, ang AuthInterceptor
-        // na ang bahala na idagdag ang token
-        // sa mga susunod na API requests.
+        this.isLoading.set(false);
+
+        // console.log('isLoading AFTER SUCCESS:', this.isLoading());
+
         // ==========================================
         // SAVE JWT
         // ==========================================
         this.authService.setToken(response.token);
-        console.log('JWT token saved.');
 
         // ==========================================
         // SAVE USERNAME
         // ==========================================
         this.authService.setUsername(response.username);
-        console.log('Username saved.');
 
         // ==========================================
         // CHECK PROFILE STATUS
         // ==========================================
         if (response.isProfileComplete) {
-          // true
-          // Profile is already complete
-          // → Dashboard
-
           this.router.navigate(['/dashboard']);
         } else {
-          // false
-          // Profile is NOT complete yet
-          // → Profile Setup
-
           this.router.navigate(['/profile-setup']);
         }
       },
@@ -138,13 +115,17 @@ export class Login {
       // ERROR
       // ==========================================
       error: (error) => {
-        this.isLoading = false;
-        console.error('Login failed:', error);
-        // Get error message returned by .NET API
+        // console.log('❌ ERROR CALLBACK');
 
-        console.log('HTTP Status:', error.status);
-        console.log('Error Object:', error);
-        console.log('Error Body:', error.error);
+        // console.log('isLoading BEFORE FALSE:', this.isLoading());
+
+        this.isLoading.set(false);
+
+        // console.log('isLoading AFTER FALSE:', this.isLoading());
+
+        // console.log('HTTP Status:', error.status);
+        // console.log('Error Object:', error);
+        // console.log('Error Body:', error.error);
 
         this.errorMessage.set(
           typeof error.error === 'string' ? error.error : 'Invalid username or password.',
