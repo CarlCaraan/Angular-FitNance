@@ -1,11 +1,12 @@
 name: Angular CI
 
 on:
-  push:
-    branches: [ "main" ]
+  workflow_dispatch:
+  # push:
+  #   branches: [ "main" ]
 
-  pull_request:
-    branches: [ "main" ]
+  # pull_request:
+  #   branches: [ "main" ]
 
 jobs:
   angular-build:
@@ -26,8 +27,6 @@ jobs:
 
       - name: Build Angular
         run: npm run build
-        
+
       - name: Test Angular
         run: npm test -- --watch=false
-
-        

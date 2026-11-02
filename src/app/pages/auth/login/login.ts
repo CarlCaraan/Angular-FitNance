@@ -105,6 +105,11 @@ export class Login {
         // CHECK PROFILE STATUS
         // ==========================================
         if (response.isProfileComplete) {
+          // ==========================================
+          // UPDATE PROFILE STATUS
+          // ==========================================
+          this.authService.setProfileComplete(true);
+
           this.router.navigate(['/dashboard']);
         } else {
           this.router.navigate(['/profile-setup']);

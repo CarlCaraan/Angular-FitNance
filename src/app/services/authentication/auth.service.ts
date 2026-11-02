@@ -8,6 +8,7 @@ export class AuthService {
   // ang JWT token sa browser.
   private readonly tokenKey = 'fitnance_token';
   private readonly usernameKey = 'username';
+  private readonly profileCompleteKey = 'isProfileComplete';
 
   // ==========================================
   // SAVE TOKEN
@@ -55,6 +56,22 @@ export class AuthService {
   }
 
   // ==========================================
+  // SAVE PROFILE STATUS
+  // ==========================================
+
+  setProfileComplete(isComplete: boolean): void {
+    localStorage.setItem(this.profileCompleteKey, String(isComplete));
+  }
+
+  // ==========================================
+  // GET PROFILE STATUS
+  // ==========================================
+
+  isProfileComplete(): boolean {
+    return localStorage.getItem(this.profileCompleteKey) === 'true';
+  }
+
+  // ==========================================
   // CHECK LOGIN STATUS
   // ==========================================
   // true  = may token
@@ -63,8 +80,13 @@ export class AuthService {
     return this.getToken() !== null;
   }
 
-  // Logout user
+  // ==========================================
+  // LOGOUT
+  // ==========================================
   logout(): void {
-    this.removeToken();
+    // this.removeToken();
+    localStorage.removeItem(this.tokenKey);
+    localStorage.removeItem(this.usernameKey);
+    localStorage.removeItem(this.profileCompleteKey);
   }
 }

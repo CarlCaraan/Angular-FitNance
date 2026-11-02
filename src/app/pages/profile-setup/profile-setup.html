@@ -553,17 +553,25 @@
       <!-- ACTION -->
       <!-- ========================= -->
 
-      <div class="flex justify-end
-                       mt-5 pt-4 border-t border-gray-100">
+      <div class="flex justify-between items-center mt-5 pt-4 border-t border-gray-100">
 
+        <!-- LOGOUT -->
+        <button type="button" (click)="logout()" class="text-sm text-gray-400
+           hover:text-red-500
+           font-medium
+           transition cursor-pointer">
+          Logout
+        </button>
+
+        <!-- NEXT -->
         <button type="submit" class="px-5 py-2.5
-                 rounded-lg
-                 bg-[var(--primary-color)]
-                 text-white
-                 text-sm
-                 font-semibold
-                 hover:bg-[var(--secondary-color)]
-                 transition">
+           rounded-lg
+           bg-[var(--primary-color)]
+           text-white
+           text-sm
+           font-semibold
+           hover:bg-[var(--secondary-color)]
+           transition">
           Next →
         </button>
 

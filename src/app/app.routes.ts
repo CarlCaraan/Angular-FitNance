@@ -12,6 +12,9 @@ import { Workout } from './pages/workout/workout';
 
 import { MainLayout } from './layouts/main-layout/main-layout';
 
+import { authGuard } from './guards/auth-guard';
+import { profileGuard } from './guards/profile-guard';
+
 export const routes: Routes = [
   // ==========================================
   // DEFAULT ROUTE
@@ -44,6 +47,7 @@ export const routes: Routes = [
   {
     path: '',
     component: MainLayout,
+    canActivate: [authGuard, profileGuard],
 
     children: [
       {
@@ -76,5 +80,6 @@ export const routes: Routes = [
   {
     path: 'profile-setup',
     component: ProfileSetup,
+    canActivate: [authGuard],
   },
 ];

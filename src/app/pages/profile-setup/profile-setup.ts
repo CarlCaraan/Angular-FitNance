@@ -16,6 +16,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ConfirmDialog } from '../../components/dialogs/confirm-dialog/confirm-dialog';
 import { MatDialog } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { AuthService } from '../../services/authentication/auth.service';
 
 @Component({
   selector: 'app-profile-setup',
@@ -325,6 +326,7 @@ export class ProfileSetup implements OnInit {
     private completeProfileService: CompleteProfileService,
     private router: Router,
     private dialog: MatDialog,
+    private authService: AuthService,
   ) {
     this.profileForm = this.fb.group({
       // =========================
@@ -727,6 +729,14 @@ export class ProfileSetup implements OnInit {
         this.isLoading = false;
         console.log(response.message);
 
+        // ==========================================
+        // UPDATE PROFILE STATUS
+        // ==========================================
+        this.authService.setProfileComplete(true);
+
+        // ==========================================
+        // NAVIGATE TO DASHBOARD
+        // ==========================================
         this.router.navigate(['/dashboard']);
       },
       error: (error: HttpErrorResponse) => {
@@ -737,5 +747,10 @@ export class ProfileSetup implements OnInit {
         console.error('Message:', error.message);
       },
     });
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }
