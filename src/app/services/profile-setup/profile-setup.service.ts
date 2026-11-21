@@ -3,8 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
-import { ProfileSetupRequest } from '../../models/profile-setup/profile-setup-request';
-import { ProfileSetupResult } from '../../models/profile-setup/profile-setup-result';
+import { ProfileSetupRequest, ProfileSetupResult } from '../../models/profile-setup/profile-setup';
 
 @Injectable({
   providedIn: 'root',

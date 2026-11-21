@@ -3,11 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
-import { UserProfile } from '../../models/profile/profile';
-import { ComputeProfileRequest } from '../../models/profile/compute-profile-request';
-import { ComputeProfileResponse } from '../../models/profile/compute-profile-response';
-import { UpdateProfileRequest } from '../../models/profile/update-profile-request';
-import { UpdateProfileResponse } from '../../models/profile/update-profile-response';
+import {
+  UserProfile,
+  ComputeProfileRequest,
+  ComputeProfileResponse,
+  UpdateProfileRequest,
+  UpdateProfileResponse,
+} from '../../models/profile/profile';
 
 @Injectable({
   providedIn: 'root',

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { NutritionGoals } from '../../models/setup/nutrition-goals';
+import { NutritionGoals } from '../../models/setup/setup';
 import { Observable } from 'rxjs';
 
 @Injectable({

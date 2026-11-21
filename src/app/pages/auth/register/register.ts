@@ -9,7 +9,7 @@ import {
   ValidationErrors,
 } from '@angular/forms';
 import { RegisterService } from '../../../services/authentication/register.service';
-import { RegisterRequest } from '../../../models/authentication/register-request';
+import { RegisterRequest } from '../../../models/authentication/authentication';
 import { AuthService } from '../../../services/authentication/auth.service';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 

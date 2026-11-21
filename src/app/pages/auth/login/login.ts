@@ -4,7 +4,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 
 import { LoginService } from '../../../services/authentication/login.service';
 import { AuthService } from '../../../services/authentication/auth.service';
-import { LoginRequest } from '../../../models/authentication/login-request';
+import { LoginRequest } from '../../../models/authentication/authentication';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatIconModule } from '@angular/material/icon';
 

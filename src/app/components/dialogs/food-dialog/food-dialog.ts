@@ -3,9 +3,8 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatButtonModule } from '@angular/material/button';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FoodService } from '../../../services/food/food.service';
-import { AddFoodRequest } from '../../../models/food/add-food-request';
-import { FoodCategories } from '../../../models/setup/food-categories';
-import { ServingUnits } from '../../../models/setup/serving-units';
+import { AddFoodRequest } from '../../../models/food/food';
+import { FoodCategories, ServingUnits } from '../../../models/setup/setup';
 import { FoodCategoriesService } from '../../../services/setup/food-categories.service';
 import { ServingUnitsService } from '../../../services/setup/serving-units.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';

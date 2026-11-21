@@ -3,8 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
-import { FoodListResponse } from '../../models/food/food-list-response';
-import { AddFoodRequest } from '../../models/food/add-food-request';
+import { FoodListResponse, AddFoodRequest } from '../../models/food/food';
 
 @Injectable({
   providedIn: 'root',

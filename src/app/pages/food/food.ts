@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 import { FoodService } from '../../services/food/food.service';
-import { MasterFood } from '../../models/food/master-food';
+import { MasterFood } from '../../models/food/food';
 import { FoodDialog } from '../../components/dialogs/food-dialog/food-dialog';
 import { ConfirmDialog } from '../../components/dialogs/confirm-dialog/confirm-dialog';
 import { forkJoin } from 'rxjs';

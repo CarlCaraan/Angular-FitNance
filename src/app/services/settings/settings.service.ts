@@ -3,8 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
-import { ChangePasswordRequest } from '../../models/settings/change-password-request';
-import { ChangePasswordResponse } from '../../models/settings/change-password-response';
+import { ChangePasswordRequest, ChangePasswordResponse } from '../../models/settings/settings';
 
 @Injectable({
   providedIn: 'root',

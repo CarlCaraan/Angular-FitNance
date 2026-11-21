@@ -1,0 +1,73 @@
+:host {
+  color: var(--primary-font-color);
+  color-scheme: light;
+  --meal-plan-error-color: #b91c1c;
+}
+
+:host-context(.dark) {
+  color-scheme: dark;
+  --meal-plan-error-color: #fca5a5;
+}
+
+[role='alert'],
+.field-error {
+  color: var(--meal-plan-error-color);
+}
+
+.muted {
+  color: var(--secondary-font-color);
+}
+
+.panel {
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+}
+
+.field {
+  display: block;
+  min-width: 0;
+  font-weight: 500;
+}
+
+.field .muted,
+.field-error {
+  font-weight: 400;
+}
+
+.field-error {
+  display: block;
+  margin-block-start: 0.25rem;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
+  gap: 0.75rem;
+}
+
+input {
+  display: block;
+  width: 100%;
+  min-height: 2.5rem;
+  margin-block-start: 0.25rem;
+  padding: 0.5rem 0.625rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  background: var(--surface-color);
+  color: var(--primary-font-color);
+  font-weight: 400;
+}
+
+input[aria-invalid='true'] {
+  border-color: var(--meal-plan-error-color);
+}
+
+input::placeholder {
+  color: var(--secondary-font-color);
+}
+
+input:focus-visible {
+  outline: 1px solid var(--primary-color);
+  outline-offset: 1px;
+}

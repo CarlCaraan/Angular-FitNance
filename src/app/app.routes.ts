@@ -8,6 +8,7 @@ import { Profile } from './pages/profile/profile';
 import { Settings } from './pages/settings/settings';
 import { ProfileSetup } from './pages/profile-setup/profile-setup';
 import { Food } from './pages/food/food';
+import { MealPlan } from './pages/meal-plan/meal-plan';
 import { Workout } from './pages/workout/workout';
 
 import { MainLayout } from './layouts/main-layout/main-layout';
@@ -57,6 +58,10 @@ export const routes: Routes = [
       {
         path: 'food',
         component: Food,
+      },
+      {
+        path: 'meal',
+        component: MealPlan,
       },
       {
         path: 'workout',

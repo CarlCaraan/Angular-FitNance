@@ -1,0 +1,257 @@
+<h2 mat-dialog-title class="!text-lg !font-bold !text-[var(--primary-font-color)]">
+  {{
+    data.mode === 'view'
+      ? 'Meal Plan Details'
+      : data.mode === 'edit'
+        ? 'Edit Meal Plan'
+        : 'Add Meal Plan'
+  }}
+</h2>
+
+<form [formGroup]="mealPlanForm" (ngSubmit)="save()">
+  <mat-dialog-content class="text-sm !text-[var(--primary-font-color)]">
+    @if (loading()) {
+      <p role="status" class="muted">Loading meal plan…</p>
+    } @else if (!loadFailed()) {
+      @if (data.mode === 'view') {
+        <h3 class="text-lg font-semibold">{{ plan()?.planName }}</h3>
+        <p class="muted mb-4">
+          {{ plan()?.startDate ?? 'No start date' }} · {{ plan()?.endDate ?? 'No end date' }}
+        </p>
+        <ul class="grid gap-2">
+          @for (item of plan()?.details; track item.mealPlanDetailId) {
+            <li class="panel">
+              <p class="font-semibold">{{ item.foodName || item.foodId }}</p>
+              <p class="muted">
+                {{ item.mealType }} · {{ item.mealDate ?? 'No date' }} ·
+                {{ (item.quantity | number: '1.0-6') ?? '—' }} servings ·
+                {{ (item.calories | number: '1.0-2') ?? '—' }} kcal
+              </p>
+            </li>
+          } @empty {
+            <li class="muted">No food items.</li>
+          }
+        </ul>
+      } @else {
+        <fieldset [disabled]="saving()" class="grid gap-5">
+          <section class="grid gap-3" aria-label="Plan details">
+            <label class="field">
+              Plan name <span class="muted">(required)</span>
+              <input
+                formControlName="planName"
+                required
+                maxlength="150"
+                placeholder="e.g. Weekly meal plan"
+                [attr.aria-invalid]="
+                  mealPlanForm.controls.planName.touched && mealPlanForm.controls.planName.invalid
+                "
+              />
+              @if (
+                mealPlanForm.controls.planName.touched && mealPlanForm.controls.planName.invalid
+              ) {
+                <span class="field-error">Enter a plan name.</span>
+              }
+            </label>
+            <div class="field-grid">
+              <label class="field"
+                >Start date <span class="muted">(optional)</span>
+                <input type="date" formControlName="startDate" />
+              </label>
+              <label class="field"
+                >End date <span class="muted">(optional)</span>
+                <input type="date" formControlName="endDate" />
+              </label>
+            </div>
+          </section>
+
+          <section class="grid gap-3" aria-labelledby="meal-plan-food-title">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h3 id="meal-plan-food-title" class="text-base font-semibold">
+                Food items <span class="muted font-normal">({{ details.length }})</span>
+              </h3>
+              <button
+                matButton
+                type="button"
+                aria-controls="meal-plan-food-picker"
+                [attr.aria-expanded]="pickerOpen()"
+                (click)="togglePicker()"
+              >
+                <mat-icon>{{ pickerOpen() ? 'close' : 'add' }}</mat-icon>
+                {{ pickerOpen() ? 'Close food picker' : 'Add food' }}
+              </button>
+            </div>
+
+            @if (pickerOpen()) {
+              <section id="meal-plan-food-picker" class="panel grid gap-2" aria-label="Food picker">
+                <label class="field">
+                  {{ replacing() ? 'Find a replacement food' : 'Find food' }}
+                  <input
+                    #foodSearchInput
+                    type="search"
+                    [formControl]="foodSearch"
+                    placeholder="Search by food name"
+                    (keydown.enter)="$event.preventDefault(); searchFoods()"
+                  />
+                </label>
+                @if (foodError()) {
+                  <div class="flex items-center justify-between gap-2">
+                    <p role="alert">{{ foodError() }}</p>
+                    <button matButton type="button" (click)="searchFoods()">Retry</button>
+                  </div>
+                } @else if (foodLoading()) {
+                  <p role="status" class="muted">Searching foods…</p>
+                } @else {
+                  <ul class="divide-y divide-[var(--border-color)]">
+                    @for (food of foods(); track food.foodId) {
+                      <li class="flex items-center justify-between gap-3 py-2">
+                        <div class="min-w-0">
+                          <p class="font-medium break-words">{{ food.foodName }}</p>
+                          @if (food.calories != null) {
+                            <p class="muted text-xs">
+                              {{ food.calories | number: '1.0-2' }} kcal per serving
+                            </p>
+                          }
+                        </div>
+                        <button
+                          matButton
+                          type="button"
+                          [attr.aria-label]="(replacing() ? 'Use ' : 'Add ') + food.foodName"
+                          (click)="addItem(food)"
+                        >
+                          {{ replacing() ? 'Use food' : 'Add' }}
+                        </button>
+                      </li>
+                    } @empty {
+                      <li class="muted py-2">No foods found. Try a different name.</li>
+                    }
+                  </ul>
+                  @if (foodCount() > foodPageSize) {
+                    <div class="flex items-center justify-between gap-2">
+                      <button
+                        class="cursor-pointer px-1 py-2 text-sm font-medium enabled:hover:underline focus-visible:outline-2 focus-visible:outline-[var(--primary-color)] disabled:cursor-default disabled:text-[var(--secondary-font-color)]"
+                        type="button"
+                        [disabled]="foodPage === 1"
+                        (click)="moveFoodPage(-1)"
+                      >
+                        Previous
+                      </button>
+                      <span class="muted text-xs">Page {{ foodPage }}</span>
+                      <button
+                        class="cursor-pointer px-1 py-2 text-sm font-medium enabled:hover:underline focus-visible:outline-2 focus-visible:outline-[var(--primary-color)] disabled:cursor-default disabled:text-[var(--secondary-font-color)]"
+                        type="button"
+                        [disabled]="foodPage * foodPageSize >= foodCount()"
+                        (click)="moveFoodPage(1)"
+                      >
+                        Next
+                      </button>
+                    </div>
+                  }
+                }
+              </section>
+            }
+
+            <p role="status" class="muted" [class.sr-only]="!feedback()">{{ feedback() }}</p>
+            <datalist id="meal-plan-meal-types">
+              @for (mealType of mealTypes; track mealType) {
+                <option [value]="mealType"></option>
+              }
+            </datalist>
+
+            <div formArrayName="details" class="grid gap-2">
+              @for (item of details.controls; track item; let i = $index) {
+                @let foodId = item.controls.foodId.value;
+                @let foodName = foodNames.get(foodId) ?? foodId;
+                <article [formGroupName]="i" class="panel grid gap-2">
+                  <div class="flex flex-wrap items-center justify-between gap-x-2">
+                    <h4 class="min-w-0 font-semibold break-words">{{ foodName }}</h4>
+                    <div class="flex items-center gap-1">
+                      <button
+                        matButton
+                        type="button"
+                        [attr.aria-label]="'Change ' + foodName"
+                        (click)="changeFood(item)"
+                      >
+                        Change
+                      </button>
+                      <button
+                        matIconButton
+                        type="button"
+                        [attr.aria-label]="'Remove ' + foodName"
+                        (click)="removeItem(i)"
+                      >
+                        <mat-icon>delete_outline</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="field-grid">
+                    <label class="field">
+                      Meal type
+                      <input
+                        formControlName="mealType"
+                        list="meal-plan-meal-types"
+                        required
+                        maxlength="50"
+                        [attr.aria-invalid]="
+                          item.controls.mealType.touched && item.controls.mealType.invalid
+                        "
+                      />
+                      @if (item.controls.mealType.touched && item.controls.mealType.invalid) {
+                        <span class="field-error">Enter a meal type.</span>
+                      }
+                    </label>
+                    <label class="field"
+                      >Meal date <span class="muted">(optional)</span>
+                      <input type="date" formControlName="mealDate" />
+                    </label>
+                    <label class="field">
+                      Servings
+                      <input
+                        type="number"
+                        inputmode="decimal"
+                        min="0.000001"
+                        max="1000000"
+                        step="any"
+                        formControlName="quantity"
+                        [required]="!item.controls.mealPlanDetailId.value"
+                        [attr.aria-invalid]="
+                          item.controls.quantity.touched && item.controls.quantity.invalid
+                        "
+                      />
+                      @if (item.controls.quantity.touched && item.controls.quantity.invalid) {
+                        <span class="field-error"
+                          >Enter a serving quantity between 0.000001 and 1,000,000.</span
+                        >
+                      }
+                    </label>
+                  </div>
+                </article>
+              } @empty {
+                <p class="muted">No food items added yet.</p>
+              }
+            </div>
+          </section>
+        </fieldset>
+      }
+    }
+  </mat-dialog-content>
+
+  @if (error()) {
+    <p role="alert" class="px-6 pt-3 text-sm">{{ error() }}</p>
+  }
+
+  <mat-dialog-actions align="end" class="gap-2">
+    <button matButton type="button" mat-dialog-close [disabled]="saving()">
+      {{ data.mode === 'view' ? 'Close' : 'Cancel' }}
+    </button>
+    @if (data.mode !== 'view') {
+      <button
+        matButton="elevated"
+        type="submit"
+        class="!bg-[var(--primary-color)] !text-[var(--primary-font-color)]"
+        [disabled]="loading() || saving() || loadFailed()"
+      >
+        {{ saving() ? 'Saving…' : 'Save Meal Plan' }}
+      </button>
+    }
+  </mat-dialog-actions>
+</form>

@@ -1,0 +1,103 @@
+<div class="min-h-screen p-4 bg-[var(--background-color)] text-[var(--primary-font-color)]">
+  <div class="mb-4 flex items-center justify-between gap-3">
+    <h1 class="text-lg font-bold">Meal Plan</h1>
+    <button matButton="elevated" type="button" [disabled]="busy()" (click)="open({ mode: 'add' })">
+      <mat-icon>add</mat-icon>
+      Add Meal Plan
+    </button>
+  </div>
+
+  <form class="mb-3 flex gap-2" (ngSubmit)="applySearch()">
+    <input
+      class="min-w-0 flex-1 rounded-lg border border-[var(--border-color)] bg-[var(--surface-color)] px-3 py-1.5 text-sm text-[var(--primary-font-color)] placeholder:text-[var(--secondary-font-color)] focus-visible:outline-[var(--primary-color)]"
+      type="search"
+      name="search"
+      [(ngModel)]="search"
+      aria-label="Search meal plans"
+      placeholder="Search by plan name"
+    />
+    <button matButton type="submit" [disabled]="busy()">Search</button>
+  </form>
+
+  @if (loadError()) {
+    <p role="alert" class="text-sm text-[var(--primary-font-color)]">
+      Could not load meal plans. <button matButton type="button" (click)="load()">Retry</button>
+    </p>
+  } @else if (busy() && !plans().length) {
+    <p role="status" class="p-6 text-center text-xs text-[var(--secondary-font-color)]">
+      Loading meal plans…
+    </p>
+  } @else {
+    <div
+      class="overflow-x-auto rounded-lg border border-[var(--border-color)] bg-[var(--surface-color)]"
+    >
+      <table class="w-full text-left text-xs text-[var(--primary-font-color)]">
+        <thead class="bg-[var(--accent-color)] text-[var(--primary-font-color)]">
+          <tr class="border-b border-[var(--border-color)]">
+            <th scope="col" class="p-3">Plan name</th>
+            <th scope="col" class="p-3">Start date</th>
+            <th scope="col" class="p-3">End date</th>
+            <th scope="col" class="p-3">Items</th>
+            <th scope="col" class="p-3">Total kcal</th>
+            <th scope="col" class="p-3 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (plan of plans(); track plan.mealPlanId) {
+            <tr class="border-b border-[var(--border-color)] last:border-b-0">
+              <td class="p-3">
+                <button
+                  class="text-left font-medium underline"
+                  type="button"
+                  [disabled]="busy()"
+                  (click)="open({ mode: 'view', id: plan.mealPlanId })"
+                >
+                  {{ plan.planName }}
+                </button>
+              </td>
+              <td class="p-3 whitespace-nowrap">{{ plan.startDate ?? '—' }}</td>
+              <td class="p-3 whitespace-nowrap">{{ plan.endDate ?? '—' }}</td>
+              <td class="p-3">{{ plan.itemCount }}</td>
+              <td class="p-3">{{ (plan.totalCalories | number: '1.0-2') ?? '—' }}</td>
+              <td class="p-2 text-right whitespace-nowrap">
+                <button
+                  matIconButton
+                  type="button"
+                  [attr.aria-label]="'Edit ' + plan.planName"
+                  [disabled]="busy()"
+                  (click)="open({ mode: 'edit', id: plan.mealPlanId })"
+                >
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button
+                  matIconButton
+                  type="button"
+                  [attr.aria-label]="'Delete ' + plan.planName"
+                  [disabled]="busy()"
+                  (click)="remove(plan)"
+                >
+                  <mat-icon>delete_outline</mat-icon>
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6" class="p-6 text-center text-[var(--secondary-font-color)]">
+                No meal plans found.
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  <mat-paginator
+    aria-label="Meal plan pages"
+    [disabled]="busy() || loadError()"
+    [length]="totalCount()"
+    [pageIndex]="pageIndex"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="[10, 25, 50]"
+    (page)="changePage($event)"
+  />
+</div>

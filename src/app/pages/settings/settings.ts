@@ -7,7 +7,7 @@ import { ThemeService } from '../../services/theme/user-theme.service';
 import { UserTheme } from '../../models/theme/user-theme';
 import { MatIconModule } from '@angular/material/icon';
 import { SettingsService } from '../../services/settings/settings.service';
-import { ChangePasswordRequest } from '../../models/settings/change-password-request';
+import { ChangePasswordRequest } from '../../models/settings/settings';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialog } from '../../components/dialogs/confirm-dialog/confirm-dialog';
 import { AuthService } from '../../services/authentication/auth.service';

@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivityLevel } from '../../models/setup/activity-level';
+import { ActivityLevel, NutritionGoals } from '../../models/setup/setup';
 import { ActivityLevelService } from '../../services/setup/activity-level.service';
-import { NutritionGoals } from '../../models/setup/nutrition-goals';
 import { NutritionGoalsService } from '../../services/setup/nutrition-goals.service';
 import { ProfileSetupService } from '../../services/profile-setup/profile-setup.service';
-import { ProfileSetupRequest } from '../../models/profile-setup/profile-setup-request';
+import {
+  ProfileSetupRequest,
+  CompleteProfileRequest,
+  CompleteProfileResponse,
+} from '../../models/profile-setup/profile-setup';
 import confetti from 'canvas-confetti';
 import { ChangeDetectorRef } from '@angular/core';
-import { CompleteProfileRequest } from '../../models/profile-setup/complete-profile-request';
-import { CompleteProfileResponse } from '../../models/profile-setup/complete-profile-response';
 import { CompleteProfileService } from '../../services/profile-setup/complete-profile.service';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';

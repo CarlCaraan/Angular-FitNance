@@ -9,12 +9,11 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 // Ito ang interface/model na naglalaman ng data na ipapadala natin sa Register API.
-import { RegisterRequest } from '../../models/authentication/register-request';
+import { RegisterRequest, RegisterResponse } from '../../models/authentication/authentication';
 
 // Kinukuha natin ang API URL mula sa environment.ts
 // para hindi natin kailangang i-hardcode ang https://localhost:7114 sa service.
 import { environment } from '../../../environments/environment';
-import { RegisterResponse } from '../../models/authentication/register-response';
 
 @Injectable({
   // Ibig sabihin, isang instance lang ng RegisterService ang gagawin

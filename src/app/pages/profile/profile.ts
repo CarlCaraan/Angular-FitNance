@@ -2,21 +2,22 @@ import { Component, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { ProfileService } from '../../services/profile/profile.service';
-import { UserProfile } from '../../models/profile/profile';
+import {
+  UserProfile,
+  ComputeProfileRequest,
+  ComputeProfileResponse,
+  UpdateProfileRequest,
+} from '../../models/profile/profile';
 
 import { ActivityLevelService } from '../../services/setup/activity-level.service';
 import { NutritionGoalsService } from '../../services/setup/nutrition-goals.service';
 
-import { ActivityLevel } from '../../models/setup/activity-level';
-import { NutritionGoals } from '../../models/setup/nutrition-goals';
+import { ActivityLevel, NutritionGoals } from '../../models/setup/setup';
 
 import { debounceTime, distinctUntilChanged, finalize, forkJoin, tap } from 'rxjs';
 
-import { ComputeProfileRequest } from '../../models/profile/compute-profile-request';
-import { ComputeProfileResponse } from '../../models/profile/compute-profile-response';
 import { AuthService } from '../../services/authentication/auth.service';
 import { LoadingService } from '../../services/loading/loading.service';
-import { UpdateProfileRequest } from '../../models/profile/update-profile-request';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialog } from '../../components/dialogs/confirm-dialog/confirm-dialog';
 
